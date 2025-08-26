@@ -1,4 +1,10 @@
 
+
+import React from 'react';
+import { PublicClientApplication } from '@azure/msal-browser';
+import { MsalProvider } from '@azure/msal-react';
+import { msalConfig } from './msalConfig';
+import M365Profile from './components/M365Profile';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import SidebarMenu from './components/layout/SidebarMenu';
 import Dashboard from './pages/Dashboard';
@@ -10,24 +16,28 @@ import AdminPage from './pages/AdminPage';
 import './assets/styles/global.css';
 import './assets/styles/dashboard.css';
 
+const msalInstance = new PublicClientApplication(msalConfig);
 
 function App() {
   return (
-    <Router>
-      <div className="dashboard-root">
-        <SidebarMenu />
-        <main className="main-content">
-          <Routes>
-            <Route path="/" element={<Dashboard />} />
-            <Route path="/email" element={<EmailPage />} />
-            <Route path="/calendar" element={<CalendarPage />} />
-            <Route path="/files" element={<FilesPage />} />
-            <Route path="/chat" element={<ChatPage />} />
-            <Route path="/admin" element={<AdminPage />} />
-          </Routes>
-        </main>
-      </div>
-    </Router>
+    <MsalProvider instance={msalInstance}>
+      <Router>
+        <div className="dashboard-root">
+          <SidebarMenu />
+          <main className="main-content">
+            <M365Profile />
+            <Routes>
+              <Route path="/" element={<Dashboard />} />
+              <Route path="/email" element={<EmailPage />} />
+              <Route path="/calendar" element={<CalendarPage />} />
+              <Route path="/files" element={<FilesPage />} />
+              <Route path="/chat" element={<ChatPage />} />
+              <Route path="/admin" element={<AdminPage />} />
+            </Routes>
+          </main>
+        </div>
+      </Router>
+    </MsalProvider>
   );
 }
 
