@@ -4,6 +4,7 @@ import { useMsal, useIsAuthenticated } from '@azure/msal-react';
 import { loginRequest } from '../msalConfig';
 import { getGraphClient } from '../services/graph';
 import { Link } from 'react-router-dom';
+import AIAssistant from '../components/AIAssistant';
 
 export default function Dashboard() {
   const { instance, accounts } = useMsal();
@@ -12,6 +13,7 @@ export default function Dashboard() {
   const [events, setEvents] = useState([]);
   const [files, setFiles] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [showCopilot, setShowCopilot] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -61,7 +63,7 @@ export default function Dashboard() {
   }
 
   return (
-    <div className="dashboard-main" style={{background:'#f8f9fa',minHeight:'100vh',padding:'0 0 40px 0'}}>
+    <div className="dashboard-main" style={{background:'#f8f9fa',minHeight:'100vh',padding:'0 0 40px 0',position:'relative'}}>
       {/* Navigation Bar */}
       <nav style={{display:'flex',alignItems:'center',justifyContent:'space-between',background:'#fff',padding:'18px 40px',boxShadow:'0 2px 8px rgba(0,0,0,0.04)',marginBottom:32}}>
         <div style={{display:'flex',alignItems:'center',gap:24}}>
@@ -166,6 +168,28 @@ export default function Dashboard() {
           </div>
         </div>
       </div>
+      {/* Copilot Floating Button */}
+      <button
+        onClick={() => setShowCopilot(true)}
+        style={{position:'fixed',bottom:32,right:32,zIndex:1000,background:'#2563eb',color:'#fff',border:'none',borderRadius:'50%',width:64,height:64,boxShadow:'0 4px 16px rgba(37,99,235,0.15)',display:'flex',alignItems:'center',justifyContent:'center',fontSize:32,cursor:'pointer'}}
+        aria-label="Open Copilot Assistant"
+      >
+        <span role="img" aria-label="Copilot">🤖</span>
+      </button>
+      {/* Copilot Modal */}
+      {showCopilot && (
+        <div style={{position:'fixed',top:0,left:0,width:'100vw',height:'100vh',background:'rgba(0,0,0,0.25)',zIndex:1100,display:'flex',alignItems:'center',justifyContent:'center'}}>
+          <div style={{background:'#fff',borderRadius:16,boxShadow:'0 8px 32px rgba(0,0,0,0.18)',padding:0,maxWidth:520,width:'90vw',maxHeight:'90vh',display:'flex',flexDirection:'column',overflow:'hidden',position:'relative'}}>
+            <div style={{display:'flex',alignItems:'center',justifyContent:'space-between',padding:'18px 24px',borderBottom:'1px solid #f0f0f0',background:'#f8f9fa'}}>
+              <span style={{fontWeight:700,fontSize:20,color:'#2563eb'}}>Copilot Assistant</span>
+              <button onClick={() => setShowCopilot(false)} style={{background:'none',border:'none',fontSize:22,cursor:'pointer',color:'#888'}} aria-label="Close">×</button>
+            </div>
+            <div style={{flex:1,overflow:'auto',padding:24}}>
+              <AIAssistant />
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

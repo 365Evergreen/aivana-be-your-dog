@@ -1,13 +1,14 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
+import { Home24Regular, Mail24Regular, Calendar24Regular, Folder24Regular, Bot24Regular, Shield24Regular } from "@fluentui/react-icons";
 
-const menu = [
-  { label: 'Dashboard', path: '/' },
-  { label: 'Email', path: '/email' },
-  { label: 'Calendar', path: '/calendar' },
-  { label: 'Files', path: '/files' },
-  { label: 'AI Assistant', path: '/chat' },
-  { label: 'Admin', path: '/admin' },
+const navLinks = [
+  { to: "/", label: "Dashboard", icon: <Home24Regular /> },
+  { to: "/email", label: "Email", icon: <Mail24Regular /> },
+  { to: "/calendar", label: "Calendar", icon: <Calendar24Regular /> },
+  { to: "/files", label: "Files", icon: <Folder24Regular /> },
+  { to: "/ai-assistant", label: "AI Assistant", icon: <Bot24Regular /> },
+  { to: "/admin", label: "Admin", icon: <Shield24Regular /> },
 ];
 
 export default function SidebarMenu() {
@@ -21,9 +22,10 @@ export default function SidebarMenu() {
         </div>
       </div>
       <ul>
-        {menu.map(item => (
-          <li key={item.path}>
-            <NavLink to={item.path} className={({ isActive }) => isActive ? 'active' : ''} end={item.path === '/'}>
+        {navLinks.map(item => (
+          <li key={item.to}>
+            <NavLink to={item.to} className={({ isActive }) => isActive ? 'active' : ''} end={item.to === '/'}>
+              {item.icon}
               {item.label}
             </NavLink>
           </li>

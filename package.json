@@ -5,6 +5,7 @@
   "dependencies": {
     "@azure/msal-browser": "^4.21.0",
     "@azure/msal-react": "^3.0.19",
+    "@fluentui/react-icons": "^2.0.308",
     "@microsoft/microsoft-graph-client": "^3.0.7",
     "@testing-library/dom": "^10.4.1",
     "@testing-library/jest-dom": "^6.8.0",
