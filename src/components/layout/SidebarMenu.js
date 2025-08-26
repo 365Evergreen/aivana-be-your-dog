@@ -1,6 +1,14 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
-import { Home24Regular, Mail24Regular, Calendar24Regular, Folder24Regular, Bot24Regular, Shield24Regular, Github24Regular } from "@fluentui/react-icons";
+import {
+  Home24Regular,
+  Mail24Regular,
+  Calendar24Regular,
+  Folder24Regular,
+  Bot24Regular,
+  Shield24Regular,
+  Github24Regular
+} from "@fluentui/react-icons";
 
 const navLinks = [
   { to: "/", label: "Dashboard", icon: <Home24Regular /> },
@@ -31,7 +39,11 @@ export default function SidebarMenu() {
           </li>
         ))}
       </ul>
-      <a href="https://github.com/365evergreen/aivana-be-your-dog" target="_blank" rel="noopener noreferrer">
+      <a
+        href="https://github.com/365evergreen/aivana-be-your-dog"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
         <Github24Regular /> GitHub
       </a>
     </nav>
