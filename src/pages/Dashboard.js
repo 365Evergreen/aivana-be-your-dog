@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from 'react';
 import { useMsal, useIsAuthenticated } from '@azure/msal-react';
 import { loginRequest } from '../msalConfig';
-import { getGraphClient, fetchEmails, fetchEvents, fetchFiles } from '../services/graph';
+import { getGraphClient } from '../services/graph';
 
 export default function Dashboard() {
   const { instance, accounts } = useMsal();
@@ -23,14 +23,15 @@ export default function Dashboard() {
         try {
           const response = await instance.acquireTokenSilent(accessTokenRequest);
           const client = getGraphClient(response.accessToken);
-          const [emailsRes, eventsRes, filesRes] = await Promise.all([
-            fetchEmails(client, 5),
-            fetchEvents(client, 3),
-            fetchFiles(client, 3),
-          ]);
-          setEmails(emailsRes);
-          setEvents(eventsRes);
-          setFiles(filesRes);
+          // Fetch emails
+          const emailsRes = await client.api('/me/mailfolders/inbox/messages').top(5).orderby('receivedDateTime DESC').get();
+          setEmails(emailsRes.value || []);
+          // Fetch events
+          const eventsRes = await client.api('/me/calendar/events').top(3).orderby('start/dateTime DESC').get();
+          setEvents(eventsRes.value || []);
+          // Fetch files
+          const filesRes = await client.api('/me/drive/root/recent').top(3).get();
+          setFiles(filesRes.value || []);
         } catch (e) {
           // handle error
         }
@@ -40,14 +41,30 @@ export default function Dashboard() {
     fetchData();
   }, [isAuthenticated, accounts, instance]);
 
+  // Get current time in Brisbane (Australia/Brisbane)
+  const getBrisbaneTime = () => {
+    try {
+      return new Date().toLocaleTimeString('en-AU', { timeZone: 'Australia/Brisbane', hour: '2-digit', minute: '2-digit', second: '2-digit' });
+    } catch {
+      return new Date().toLocaleTimeString();
+    }
+  };
+  if (loading) {
+    return (
+      <div className="dashboard-loading">
+        <p>Loading...</p>
+      </div>
+    );
+  }
+
   return (
     <div>
       <div className="dashboard-header">
         <div>
-          <h1>Good morning, John!</h1>
+          <h1>Good morning!</h1>
           <p>Here's what's happening with your Microsoft 365 workspace today.</p>
         </div>
-        <div className="last-updated">Last updated: 18:13:21</div>
+        <div className="last-updated">Brisbane time: {getBrisbaneTime()}</div>
       </div>
       <div className="dashboard-widgets">
         <div className="widget-card">
@@ -126,7 +143,7 @@ export default function Dashboard() {
         <div className="section-header">
           <h2>Recent Files & Documents</h2>
           <div className="files-section-footer">
-            <button>Browse OneDrive</button>
+            <button disabled title="Coming soon">Browse OneDrive</button>
           </div>
         </div>
         <div className="files-list">
