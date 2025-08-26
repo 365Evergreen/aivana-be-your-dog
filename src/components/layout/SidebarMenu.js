@@ -6,9 +6,9 @@ import {
   Calendar24Regular,
   Folder24Regular,
   Bot24Regular,
-  Shield24Regular,
-  Github24Regular
+  Shield24Regular
 } from "@fluentui/react-icons";
+import { FaGithub } from "react-icons/fa"; // Added for GitHub icon
 
 const navLinks = [
   { to: "/", label: "Dashboard", icon: <Home24Regular /> },
@@ -44,7 +44,7 @@ export default function SidebarMenu() {
         target="_blank"
         rel="noopener noreferrer"
       >
-        <Github24Regular /> GitHub
+        <FaGithub style={{ verticalAlign: "middle", marginRight: 8 }} /> GitHub
       </a>
     </nav>
   );
