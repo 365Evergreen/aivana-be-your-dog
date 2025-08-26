@@ -1,8 +1,8 @@
-
 import React, { useEffect, useState } from 'react';
 import { useMsal, useIsAuthenticated } from '@azure/msal-react';
 import { loginRequest } from '../msalConfig';
-import { getGraphClient } from '../services/graph';
+import { Client } from '@microsoft/microsoft-graph-client';
+import 'isomorphic-fetch';
 import { Link } from 'react-router-dom';
 import AIAssistant from '../components/AIAssistant';
 
@@ -19,21 +19,30 @@ export default function Dashboard() {
     const fetchData = async () => {
       if (isAuthenticated && accounts.length > 0) {
         setLoading(true);
-        const accessTokenRequest = {
-          ...loginRequest,
-          account: accounts[0],
-        };
         try {
-          const response = await instance.acquireTokenSilent(accessTokenRequest);
-          const client = getGraphClient(response.accessToken);
+          const account = accounts[0];
+          const response = await instance.acquireTokenSilent({
+            ...loginRequest,
+            account,
+          });
+          const accessToken = response.accessToken;
+
+          const graphClient = Client.init({
+            authProvider: (done) => {
+              done(null, accessToken);
+            },
+          });
+
           // Fetch emails
-          const emailsRes = await client.api('/me/mailfolders/inbox/messages').top(5).orderby('receivedDateTime DESC').get();
-          setEmails(emailsRes.value || []);
-          // Fetch events
-          const eventsRes = await client.api('/me/calendar/events').top(3).orderby('start/dateTime DESC').get();
+          const mailRes = await graphClient.api('/me/mailfolders/inbox/messages').top(5).get();
+          setEmails(mailRes.value || []);
+
+          // Fetch calendar events
+          const eventsRes = await graphClient.api('/me/events').top(5).get();
           setEvents(eventsRes.value || []);
+
           // Fetch files
-          const filesRes = await client.api('/me/drive/root/recent').top(3).get();
+          const filesRes = await graphClient.api('/me/drive/root/children').top(5).get();
           setFiles(filesRes.value || []);
         } catch (e) {
           // handle error
