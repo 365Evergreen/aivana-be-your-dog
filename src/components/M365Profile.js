@@ -8,8 +8,18 @@ const M365Profile = () => {
   const isAuthenticated = useIsAuthenticated();
   const [profile, setProfile] = React.useState(null);
 
+
+  // Try silent SSO on mount
+  React.useEffect(() => {
+    if (!isAuthenticated) {
+      instance.ssoSilent(loginRequest).catch(() => {
+        // fallback: do nothing, show sign in button
+      });
+    }
+  }, [isAuthenticated, instance]);
+
   const handleLogin = () => {
-    instance.loginPopup(loginRequest);
+    instance.loginRedirect(loginRequest);
   };
 
   React.useEffect(() => {

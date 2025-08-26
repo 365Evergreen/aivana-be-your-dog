@@ -1,7 +1,45 @@
 
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import { useMsal, useIsAuthenticated } from '@azure/msal-react';
+import { loginRequest } from '../msalConfig';
+import { getGraphClient, fetchEmails, fetchEvents, fetchFiles } from '../services/graph';
 
 export default function Dashboard() {
+  const { instance, accounts } = useMsal();
+  const isAuthenticated = useIsAuthenticated();
+  const [emails, setEmails] = useState([]);
+  const [events, setEvents] = useState([]);
+  const [files, setFiles] = useState([]);
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      if (isAuthenticated && accounts.length > 0) {
+        setLoading(true);
+        const accessTokenRequest = {
+          ...loginRequest,
+          account: accounts[0],
+        };
+        try {
+          const response = await instance.acquireTokenSilent(accessTokenRequest);
+          const client = getGraphClient(response.accessToken);
+          const [emailsRes, eventsRes, filesRes] = await Promise.all([
+            fetchEmails(client, 5),
+            fetchEvents(client, 3),
+            fetchFiles(client, 3),
+          ]);
+          setEmails(emailsRes);
+          setEvents(eventsRes);
+          setFiles(filesRes);
+        } catch (e) {
+          // handle error
+        }
+        setLoading(false);
+      }
+    };
+    fetchData();
+  }, [isAuthenticated, accounts, instance]);
+
   return (
     <div>
       <div className="dashboard-header">
@@ -17,32 +55,32 @@ export default function Dashboard() {
             <span role="img" aria-label="email">📧</span>
           </div>
           <div className="widget-title">Unread Emails</div>
-          <div className="widget-value">12</div>
-          <div className="widget-sub">+3 from yesterday</div>
+          <div className="widget-value">{emails.length}</div>
+          <div className="widget-sub">{emails[0]?.subject || ''}</div>
         </div>
         <div className="widget-card">
           <div className="widget-icon" style={{background:'#e6f4ea', color:'#22c55e'}}>
             <span role="img" aria-label="calendar">📅</span>
           </div>
           <div className="widget-title">Today's Meetings</div>
-          <div className="widget-value">4</div>
-          <div className="widget-sub">Next in 2 hours</div>
+          <div className="widget-value">{events.length}</div>
+          <div className="widget-sub">{events[0]?.subject || ''}</div>
         </div>
         <div className="widget-card">
           <div className="widget-icon" style={{background:'#f3e8ff', color:'#a259ec'}}>
             <span role="img" aria-label="files">📄</span>
           </div>
           <div className="widget-title">Recent Files</div>
-          <div className="widget-value">8</div>
-          <div className="widget-sub">3 shared today</div>
+          <div className="widget-value">{files.length}</div>
+          <div className="widget-sub">{files[0]?.name || ''}</div>
         </div>
         <div className="widget-card">
           <div className="widget-icon" style={{background:'#fff7e6', color:'#f59e42'}}>
             <span role="img" aria-label="team">👥</span>
           </div>
           <div className="widget-title">Team Updates</div>
-          <div className="widget-value">15</div>
-          <div className="widget-sub">5 new mentions</div>
+          <div className="widget-value">-</div>
+          <div className="widget-sub">-</div>
         </div>
       </div>
       <div className="dashboard-sections">
@@ -52,27 +90,15 @@ export default function Dashboard() {
             <button>View All</button>
           </div>
           <ul className="schedule-list">
-            <li className="schedule-item">
-              <div className="schedule-info">
-                <span className="schedule-title">Weekly Team Standup</span>
-                <span className="schedule-meta">10:00 AM · 8 attendees</span>
-              </div>
-              <span className="schedule-status">Upcoming</span>
-            </li>
-            <li className="schedule-item">
-              <div className="schedule-info">
-                <span className="schedule-title">Project Review</span>
-                <span className="schedule-meta">2:00 PM · 4 attendees</span>
-              </div>
-              <span className="schedule-status">Upcoming</span>
-            </li>
-            <li className="schedule-item">
-              <div className="schedule-info">
-                <span className="schedule-title">Client Presentation</span>
-                <span className="schedule-meta">4:30 PM · 12 attendees</span>
-              </div>
-              <span className="schedule-status">Upcoming</span>
-            </li>
+            {events.map(ev => (
+              <li className="schedule-item" key={ev.id}>
+                <div className="schedule-info">
+                  <span className="schedule-title">{ev.subject}</span>
+                  <span className="schedule-meta">{ev.start?.dateTime?.slice(11,16)} · {ev.attendees?.length || 0} attendees</span>
+                </div>
+                <span className="schedule-status">{ev.showAs || 'Scheduled'}</span>
+              </li>
+            ))}
           </ul>
         </div>
         <div className="section-card" style={{flex:1}}>
@@ -81,34 +107,18 @@ export default function Dashboard() {
             <button>View Inbox</button>
           </div>
           <ul className="email-list">
-            <li className="email-item">
-              <div className="email-info">
-                <span className="email-sender">Sarah Johnson</span>
-                <span className="email-subject">Q4 Budget Review</span>
-              </div>
-              <div className="email-meta">
-                <span className="email-time">9:30 AM</span>
-                <span className="email-priority">High</span>
-              </div>
-            </li>
-            <li className="email-item">
-              <div className="email-info">
-                <span className="email-sender">Marketing Team</span>
-                <span className="email-subject">Campaign Performance Update</span>
-              </div>
-              <div className="email-meta">
-                <span className="email-time">8:45 AM</span>
-              </div>
-            </li>
-            <li className="email-item">
-              <div className="email-info">
-                <span className="email-sender">IT Support</span>
-                <span className="email-subject">System Maintenance Notice</span>
-              </div>
-              <div className="email-meta">
-                <span className="email-time">8:20 AM</span>
-              </div>
-            </li>
+            {emails.map(email => (
+              <li className="email-item" key={email.id}>
+                <div className="email-info">
+                  <span className="email-sender">{email.from?.emailAddress?.name}</span>
+                  <span className="email-subject">{email.subject}</span>
+                </div>
+                <div className="email-meta">
+                  <span className="email-time">{email.receivedDateTime?.slice(11,16)}</span>
+                  {email.importance === 'high' && <span className="email-priority">High</span>}
+                </div>
+              </li>
+            ))}
           </ul>
         </div>
       </div>
@@ -120,21 +130,13 @@ export default function Dashboard() {
           </div>
         </div>
         <div className="files-list">
-          <div className="file-card">
-            <div className="file-title">Q4_Financial_Report.xlsx</div>
-            <div className="file-meta">Modified 2 hours ago</div>
-            <div className="file-shared">Shared by Finance Team</div>
-          </div>
-          <div className="file-card">
-            <div className="file-title">Product_Roadmap_2024.pptx</div>
-            <div className="file-meta">Modified 4 hours ago</div>
-            <div className="file-shared">Shared by Product Team</div>
-          </div>
-          <div className="file-card">
-            <div className="file-title">Meeting_Notes_Dec15.docx</div>
-            <div className="file-meta">Modified 1 day ago</div>
-            <div className="file-shared">Shared by You</div>
-          </div>
+          {files.map(file => (
+            <div className="file-card" key={file.id}>
+              <div className="file-title">{file.name}</div>
+              <div className="file-meta">Modified {file.lastModifiedDateTime?.slice(0,10)}</div>
+              <div className="file-shared">{file.createdBy?.user?.displayName ? `Shared by ${file.createdBy.user.displayName}` : ''}</div>
+            </div>
+          ))}
         </div>
       </div>
     </div>

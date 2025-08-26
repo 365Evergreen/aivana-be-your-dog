@@ -5,6 +5,10 @@ export const msalConfig = {
     authority: "https://login.microsoftonline.com/7a5bf294-6ae8-47c4-b0c4-b2f9166d7a3f", // Your tenant ID
     redirectUri: "http://localhost:3000/", // Update if deploying elsewhere
   },
+  cache: {
+    cacheLocation: "localStorage",
+    storeAuthStateInCookie: false
+  }
 };
 
 export const loginRequest = {
