@@ -11,6 +11,7 @@ import CalendarPage from './pages/CalendarPage';
 import FilesPage from './pages/FilesPage';
 import ChatPage from './pages/ChatPage';
 import AdminPage from './pages/AdminPage';
+import AdminPagesPage from './pages/AdminPagesPage'; // Import the new page
 import './assets/styles/global.css';
 import './assets/styles/dashboard.css';
 
@@ -30,6 +31,7 @@ function App() {
               <Route path="/files" element={<FilesPage />} />
               <Route path="/chat" element={<ChatPage />} />
               <Route path="/admin" element={<AdminPage />} />
+              <Route path="/admin/pages" element={<AdminPagesPage />} /> {/* Add the new route here */}
             </Routes>
           </main>
         </div>
@@ -38,3 +40,6 @@ function App() {
 }
 
 export default App;
+
+// In your Admin navigation component
+<NavLink to="/admin/pages">Page Manager</NavLink>
