@@ -1,6 +1,7 @@
 import React from 'react';
 import { PublicClientApplication } from '@azure/msal-browser';
 import { MsalProvider } from '@azure/msal-react';
+import { Routes, Route } from 'react-router-dom'; // Add this import
 import { msalConfig } from './msalConfig';
 import M365Profile from './components/M365Profile';
 import SidebarMenu from './components/layout/SidebarMenu';
