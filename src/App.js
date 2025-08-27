@@ -17,6 +17,7 @@ import FilesPage from "./pages/FilesPage";
 import ChatPage from "./pages/ChatPage";
 import AdminPage from "./pages/AdminPage";
 import AdminPagesPage from "./pages/AdminPagesPage";
+import FloatingCopilotBot from './components/FloatingCopilotBot';
 
 import "./assets/styles/global.css";
 import "./assets/styles/dashboard.css";
@@ -25,24 +26,25 @@ const msalInstance = new PublicClientApplication(msalConfig);
 
 function App() {
   return (
-<MsalProvider instance={msalInstance}>
-  <div className="dashboard-root">
-    <SidebarMenu />
-    <main className="main-content">
-      <M365Profile />
-      <NavLink to="/admin/pages">Page Manager</NavLink>
-      <Routes>
-        <Route path="/" element={<Dashboard />} />
-        <Route path="/email" element={<EmailPage />} />
-        <Route path="/calendar" element={<CalendarPage />} />
-        <Route path="/files" element={<FilesPage />} />
-        <Route path="/chat" element={<ChatPage />} />
-        <Route path="/admin" element={<AdminPage />} />
-        <Route path="/admin/pages" element={<AdminPagesPage />} />
-      </Routes>
-    </main>
-  </div>
-</MsalProvider>
+    <MsalProvider instance={msalInstance}>
+      <div className="dashboard-root">
+        <SidebarMenu />
+        <main className="main-content">
+          <M365Profile />
+          <NavLink to="/admin/pages">Page Manager</NavLink>
+          <Routes>
+            <Route path="/" element={<Dashboard />} />
+            <Route path="/email" element={<EmailPage />} />
+            <Route path="/calendar" element={<CalendarPage />} />
+            <Route path="/files" element={<FilesPage />} />
+            <Route path="/chat" element={<ChatPage />} />
+            <Route path="/admin" element={<AdminPage />} />
+            <Route path="/admin/pages" element={<AdminPagesPage />} />
+          </Routes>
+        </main>
+        <FloatingCopilotBot />
+      </div>
+    </MsalProvider>
   );
 }
 
