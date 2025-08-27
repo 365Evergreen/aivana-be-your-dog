@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from 'react';
 import { useMsal } from "@azure/msal-react";
-import "./ChatPage.css";
+import "src/assets/styles/ChatPage.css";
 
 export default function ChatPage() {
   const chatContainerRef = useRef(null);
