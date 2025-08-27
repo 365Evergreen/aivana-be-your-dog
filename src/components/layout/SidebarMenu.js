@@ -10,13 +10,15 @@ import {
 } from "@fluentui/react-icons";
 import { FaGithub } from "react-icons/fa"; // Added for GitHub icon
 
+const BASE_URL = "https://365evergreen.github.io/aivana-be-your-dog";
+
 const navLinks = [
-  { to: "/", label: "Dashboard", icon: <Home24Regular /> },
-  { to: "/email", label: "Email", icon: <Mail24Regular /> },
-  { to: "/calendar", label: "Calendar", icon: <Calendar24Regular /> },
-  { to: "/files", label: "Files", icon: <Folder24Regular /> },
-  { to: "/ai-assistant", label: "AI Assistant", icon: <Bot24Regular /> },
-  { to: "/admin", label: "Admin", icon: <Shield24Regular /> },
+  { to: `${BASE_URL}/`, label: "Dashboard", icon: <Home24Regular /> },
+  { to: `${BASE_URL}/email`, label: "Email", icon: <Mail24Regular /> },
+  { to: `${BASE_URL}/calendar`, label: "Calendar", icon: <Calendar24Regular /> },
+  { to: `${BASE_URL}/files`, label: "Files", icon: <Folder24Regular /> },
+  { to: `${BASE_URL}/ai-assistant`, label: "AI Assistant", icon: <Bot24Regular /> },
+  { to: `${BASE_URL}/admin`, label: "Admin", icon: <Shield24Regular /> },
 ];
 
 export default function SidebarMenu() {
@@ -32,10 +34,10 @@ export default function SidebarMenu() {
       <ul>
         {navLinks.map(item => (
           <li key={item.to}>
-            <NavLink to={item.to} className={({ isActive }) => isActive ? 'active' : ''} end={item.to === '/'}>
+            <a href={item.to}>
               {item.icon}
               {item.label}
-            </NavLink>
+            </a>
           </li>
         ))}
       </ul>
