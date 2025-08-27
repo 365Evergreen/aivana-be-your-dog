@@ -7,11 +7,11 @@ export default function ChatPage() {
   const botId = "53333422-097b-f011-b4cc-000d3a79d4f1";
 
   useEffect(() => {
-    // Reference to store the iframe element
-    let iframeElement = null;
-    
     // Only proceed if the container ref is available
     if (!chatContainerRef.current) return;
+
+    // Capture the current ref value to use in cleanup
+    const container = chatContainerRef.current;
     
     const loadBot = () => {
       try {
@@ -30,11 +30,8 @@ export default function ChatPage() {
         };
         
         // Clear any existing content
-        chatContainerRef.current.innerHTML = '';
-        chatContainerRef.current.appendChild(iframe);
-        
-        // Store reference to the iframe
-        iframeElement = iframe;
+        container.innerHTML = '';
+        container.appendChild(iframe);
         
         // Add message event listener to catch errors from iframe
         window.addEventListener('message', handleIframeMessages);
@@ -54,9 +51,9 @@ export default function ChatPage() {
     
     // Show error message when bot fails to load
     const showErrorMessage = () => {
-      if (!chatContainerRef.current) return;
+      if (!container) return;
       
-      chatContainerRef.current.innerHTML = `
+      container.innerHTML = `
         <div class="chat-error">
           <h3>Connection Error</h3>
           <p>Unable to connect to the AI Assistant. Please try again later.</p>
@@ -66,7 +63,7 @@ export default function ChatPage() {
       `;
       
       // Add event listener to retry button
-      const retryButton = chatContainerRef.current.querySelector('#retry-button');
+      const retryButton = container.querySelector('#retry-button');
       if (retryButton) {
         retryButton.addEventListener('click', loadBot);
       }
@@ -78,8 +75,8 @@ export default function ChatPage() {
     // Clean up function
     return () => {
       window.removeEventListener('message', handleIframeMessages);
-      if (chatContainerRef.current) {
-        chatContainerRef.current.innerHTML = '';
+      if (container) {
+        container.innerHTML = '';
       }
     };
   }, [tenantId, botId]);
