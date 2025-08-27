@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from 'react';
 import { useMsal } from "@azure/msal-react";
-import "src/assets/styles/ChatPage.css";
+import "../assets/styles/ChatPage.css";  // Updated to use relative path
 
 export default function ChatPage() {
   const chatContainerRef = useRef(null);
