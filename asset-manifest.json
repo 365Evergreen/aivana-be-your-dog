@@ -1,13 +1,13 @@
 {
   "files": {
-    "main.css": "/aivana-be-your-dog/static/css/main.6019e7e4.css",
-    "main.js": "/aivana-be-your-dog/static/js/main.96eaac4a.js",
+    "main.css": "/aivana-be-your-dog/static/css/main.d6787bf3.css",
+    "main.js": "/aivana-be-your-dog/static/js/main.96b20137.js",
     "index.html": "/aivana-be-your-dog/index.html",
-    "main.6019e7e4.css.map": "/aivana-be-your-dog/static/css/main.6019e7e4.css.map",
-    "main.96eaac4a.js.map": "/aivana-be-your-dog/static/js/main.96eaac4a.js.map"
+    "main.d6787bf3.css.map": "/aivana-be-your-dog/static/css/main.d6787bf3.css.map",
+    "main.96b20137.js.map": "/aivana-be-your-dog/static/js/main.96b20137.js.map"
   },
   "entrypoints": [
-    "static/css/main.6019e7e4.css",
-    "static/js/main.96eaac4a.js"
+    "static/css/main.d6787bf3.css",
+    "static/js/main.96b20137.js"
   ]
 }
