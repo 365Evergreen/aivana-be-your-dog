@@ -27,7 +27,7 @@ const msalInstance = new PublicClientApplication(msalConfig);
 function App() {
   return (
     <MsalProvider instance={msalInstance}>
-      <Router>
+      <Routes>
         <div className="dashboard-root">
           <SidebarMenu />
           <main className="main-content">
@@ -44,7 +44,7 @@ function App() {
             </Routes>
           </main>
         </div>
-      </Router>
+      </Routes>
     </MsalProvider>
   );
 }
