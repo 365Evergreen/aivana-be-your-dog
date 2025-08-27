@@ -2,7 +2,6 @@ import React from "react";
 import { PublicClientApplication } from "@azure/msal-browser";
 import { MsalProvider } from "@azure/msal-react";
 import {
-  BrowserRouter as Router,
   Routes,
   Route,
   NavLink,
@@ -26,26 +25,24 @@ const msalInstance = new PublicClientApplication(msalConfig);
 
 function App() {
   return (
-    <MsalProvider instance={msalInstance}>
+<MsalProvider instance={msalInstance}>
+  <div className="dashboard-root">
+    <SidebarMenu />
+    <main className="main-content">
+      <M365Profile />
+      <NavLink to="/admin/pages">Page Manager</NavLink>
       <Routes>
-        <div className="dashboard-root">
-          <SidebarMenu />
-          <main className="main-content">
-            <M365Profile />
-            <NavLink to="/admin/pages">Page Manager</NavLink> {/* ✅ Now it's valid */}
-            <Routes>
-              <Route path="/" element={<Dashboard />} />
-              <Route path="/email" element={<EmailPage />} />
-              <Route path="/calendar" element={<CalendarPage />} />
-              <Route path="/files" element={<FilesPage />} />
-              <Route path="/chat" element={<ChatPage />} />
-              <Route path="/admin" element={<AdminPage />} />
-              <Route path="/admin/pages" element={<AdminPagesPage />} />
-            </Routes>
-          </main>
-        </div>
+        <Route path="/" element={<Dashboard />} />
+        <Route path="/email" element={<EmailPage />} />
+        <Route path="/calendar" element={<CalendarPage />} />
+        <Route path="/files" element={<FilesPage />} />
+        <Route path="/chat" element={<ChatPage />} />
+        <Route path="/admin" element={<AdminPage />} />
+        <Route path="/admin/pages" element={<AdminPagesPage />} />
       </Routes>
-    </MsalProvider>
+    </main>
+  </div>
+</MsalProvider>
   );
 }
 
