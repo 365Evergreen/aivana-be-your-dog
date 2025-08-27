@@ -1,11 +1,8 @@
-
-
 import React from 'react';
 import { PublicClientApplication } from '@azure/msal-browser';
 import { MsalProvider } from '@azure/msal-react';
 import { msalConfig } from './msalConfig';
 import M365Profile from './components/M365Profile';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import SidebarMenu from './components/layout/SidebarMenu';
 import Dashboard from './pages/Dashboard';
 import EmailPage from './pages/EmailPage';
@@ -21,7 +18,6 @@ const msalInstance = new PublicClientApplication(msalConfig);
 function App() {
   return (
     <MsalProvider instance={msalInstance}>
-      <Router>
         <div className="dashboard-root">
           <SidebarMenu />
           <main className="main-content">
@@ -36,7 +32,6 @@ function App() {
             </Routes>
           </main>
         </div>
-      </Router>
     </MsalProvider>
   );
 }
