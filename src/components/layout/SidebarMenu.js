@@ -1,5 +1,4 @@
 import React from 'react';
-import { NavLink } from 'react-router-dom';
 import {
   Home24Regular,
   Mail24Regular,
@@ -8,17 +7,17 @@ import {
   Bot24Regular,
   Shield24Regular
 } from "@fluentui/react-icons";
-import { FaGithub } from "react-icons/fa"; // Added for GitHub icon
+import { FaGithub } from "react-icons/fa";
 
 const BASE_URL = "https://365evergreen.github.io/aivana-be-your-dog";
 
 const navLinks = [
-  { to: `${BASE_URL}/`, label: "Dashboard", icon: <Home24Regular /> },
-  { to: `${BASE_URL}/email`, label: "Email", icon: <Mail24Regular /> },
-  { to: `${BASE_URL}/calendar`, label: "Calendar", icon: <Calendar24Regular /> },
-  { to: `${BASE_URL}/files`, label: "Files", icon: <Folder24Regular /> },
-  { to: `${BASE_URL}/ai-assistant`, label: "AI Assistant", icon: <Bot24Regular /> },
-  { to: `${BASE_URL}/admin`, label: "Admin", icon: <Shield24Regular /> },
+  { to: `${BASE_URL}/#/`, label: "Dashboard", icon: <Home24Regular /> },
+  { to: `${BASE_URL}/#/email`, label: "Email", icon: <Mail24Regular /> },
+  { to: `${BASE_URL}/#/calendar`, label: "Calendar", icon: <Calendar24Regular /> },
+  { to: `${BASE_URL}/#/files`, label: "Files", icon: <Folder24Regular /> },
+  { to: `${BASE_URL}/#/ai-assistant`, label: "AI Assistant", icon: <Bot24Regular /> },
+  { to: `${BASE_URL}/#/admin`, label: "Admin", icon: <Shield24Regular /> },
 ];
 
 export default function SidebarMenu() {
@@ -26,10 +25,6 @@ export default function SidebarMenu() {
     <nav className="sidebar-menu">
       <div className="sidebar-user">
         <div className="avatar" />
-        <div>
-          <div className="user-name">John Doe</div>
-          <div className="user-email">john.doe@company.com</div>
-        </div>
       </div>
       <ul>
         {navLinks.map(item => (
