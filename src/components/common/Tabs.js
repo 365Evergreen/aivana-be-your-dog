@@ -1,15 +1,22 @@
 import React, { useState } from 'react';
+import { Pivot, PivotItem } from '@fluentui/react';
+
 const Tabs = ({ tabs = [] }) => {
   const [active, setActive] = useState(0);
   return (
     <div className="tabs">
-      <div className="tab-list">
-        {tabs.map((tab, i) => (
-          <button key={tab.label} className={active === i ? 'active' : ''} onClick={() => setActive(i)}>{tab.label}</button>
+      <Pivot selectedKey={tabs[active]?.label} onLinkClick={(item) => {
+        const idx = tabs.findIndex(t => t.label === item.props.headerText);
+        if (idx >= 0) setActive(idx);
+      }}>
+        {tabs.map((tab) => (
+          <PivotItem headerText={tab.label} key={tab.label}>
+            <div className="tab-content">{tab.content}</div>
+          </PivotItem>
         ))}
-      </div>
-      <div className="tab-content">{tabs[active] && tabs[active].content}</div>
+      </Pivot>
     </div>
   );
 };
+
 export default Tabs;

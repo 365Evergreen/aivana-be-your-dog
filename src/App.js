@@ -1,4 +1,5 @@
 import React from "react";
+import { loadTheme } from '@fluentui/react';
 import { MsalProvider } from "@azure/msal-react";
 import {
   Routes,
@@ -37,11 +38,53 @@ function App() {
       try {
         const d = e.detail || {};
         setCompactMode(!!d.compactMode);
+        if (typeof d.darkMode === 'boolean') {
+          // apply theme at runtime
+          applyTheme(!!d.darkMode);
+        }
       } catch (err) {}
     };
     window.addEventListener('appSettingsChanged', handler);
     return () => window.removeEventListener('appSettingsChanged', handler);
   }, []);
+
+  // apply initial theme based on stored setting
+  React.useEffect(() => {
+    try {
+      const raw = localStorage.getItem('app.settings.v1');
+      if (raw) {
+        const s = JSON.parse(raw);
+        if (typeof s.darkMode === 'boolean') applyTheme(!!s.darkMode);
+      }
+    } catch (e) {}
+  }, []);
+
+  function applyTheme(dark) {
+    // set body data attribute for CSS and load Fluent palette
+    try {
+      if (dark) {
+        document.documentElement.setAttribute('data-theme', 'dark');
+        loadTheme({
+          palette: {
+            themePrimary: '#2b88d8',
+            neutralPrimary: '#e6e6e6',
+            neutralLighterAlt: '#1b1b1d',
+            white: '#0b0b0b'
+          }
+        });
+      } else {
+        document.documentElement.removeAttribute('data-theme');
+        loadTheme({
+          palette: {
+            themePrimary: '#0063b1',
+            neutralPrimary: '#222222',
+            neutralLighterAlt: '#f3f2f1',
+            white: '#ffffff'
+          }
+        });
+      }
+    } catch (e) {}
+  }
 
   return (
     <MsalProvider instance={msalInstance}>
