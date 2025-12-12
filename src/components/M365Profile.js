@@ -1,54 +1,59 @@
 import React from 'react';
 import { useMsal, useIsAuthenticated } from '@azure/msal-react';
 import { loginRequest } from '../msalConfig';
-import { Client } from '@microsoft/microsoft-graph-client';
+import { acquireToken, logout, getAccount } from '../services/auth';
+import { fetchGraph } from '../services/graph';
 
-const M365Profile = () => {
+// Lightweight profile component used in the dashboard header.
+// - Uses `useMsal` for interactive flows and `acquireToken` helper for service calls.
+// - Keeps UI minimal: shows Sign in / Sign out and basic profile info.
+export default function M365Profile() {
   const { instance, accounts } = useMsal();
   const isAuthenticated = useIsAuthenticated();
   const [profile, setProfile] = React.useState(null);
 
-
-  // Try silent SSO on mount
   React.useEffect(() => {
+    // attempt silent SSO when app mounts
     if (!isAuthenticated) {
-      instance.ssoSilent(loginRequest).catch(() => {
-        // fallback: do nothing, show sign in button
-      });
+      instance.ssoSilent?.(loginRequest).catch(() => {});
     }
   }, [isAuthenticated, instance]);
 
-  const handleLogin = () => {
-    instance.loginRedirect(loginRequest);
-  };
+  const handleLogin = () => instance.loginPopup(loginRequest);
+  const handleLogout = () => logout();
 
   React.useEffect(() => {
-    if (isAuthenticated && accounts.length > 0) {
-      const accessTokenRequest = {
-        ...loginRequest,
-        account: accounts[0],
-      };
-      instance.acquireTokenSilent(accessTokenRequest).then(response => {
-        const client = Client.init({
-          authProvider: (done) => {
-            done(null, response.accessToken);
-          },
-        });
-        client.api('/me').get().then(user => setProfile(user));
-      });
+    let mounted = true;
+    async function loadProfile() {
+      try {
+        const account = getAccount() || accounts[0];
+        if (!account) return;
+        const token = await acquireToken();
+        const user = await fetchGraph('/me', token);
+        if (mounted) setProfile(user);
+      } catch (e) {
+        // ignore; UI stays simple
+      }
     }
-  }, [isAuthenticated, accounts, instance]);
+    if (isAuthenticated) loadProfile();
+    return () => { mounted = false; };
+  }, [isAuthenticated, accounts]);
 
   if (!isAuthenticated) {
-    return <button onClick={handleLogin}>Sign in with Microsoft 365</button>;
+    return <button onClick={handleLogin}>Sign in</button>;
   }
 
-  return profile ? (
-    <div style={{margin: '1rem 0'}}>
-      <h3>Welcome, {profile.displayName}</h3>
-      <p>Email: {profile.mail || profile.userPrincipalName}</p>
+  return (
+    <div style={{ margin: '1rem 0' }}>
+      {profile ? (
+        <>
+          <h3>Welcome, {profile.displayName}</h3>
+          <p>{profile.mail || profile.userPrincipalName}</p>
+        </>
+      ) : (
+        <div>Loading profile...</div>
+      )}
+      <button onClick={handleLogout} style={{ marginLeft: 8 }}>Sign out</button>
     </div>
-  ) : <div>Loading profile...</div>;
-};
-
-export default M365Profile;
+  );
+}

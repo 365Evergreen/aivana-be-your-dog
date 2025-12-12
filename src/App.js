@@ -1,5 +1,4 @@
 import React from "react";
-import { PublicClientApplication } from "@azure/msal-browser";
 import { MsalProvider } from "@azure/msal-react";
 import {
   Routes,
@@ -7,7 +6,7 @@ import {
   NavLink,
 } from "react-router-dom";
 
-import { msalConfig } from "./msalConfig";
+import { msalInstance } from "./services/msalInstance";
 import M365Profile from "./components/M365Profile";
 import SidebarMenu from "./components/layout/SidebarMenu";
 import Dashboard from "./pages/Dashboard";
@@ -22,12 +21,31 @@ import FloatingCopilotBot from './components/FloatingCopilotBot';
 import "./assets/styles/global.css";
 import "./assets/styles/dashboard.css";
 
-const msalInstance = new PublicClientApplication(msalConfig);
-
 function App() {
+  const [compactMode, setCompactMode] = React.useState(false);
+
+  React.useEffect(() => {
+    // read persisted settings
+    try {
+      const raw = localStorage.getItem('app.settings.v1');
+      if (raw) {
+        const s = JSON.parse(raw);
+        if (s.compactMode) setCompactMode(true);
+      }
+    } catch (e) {}
+    const handler = (e) => {
+      try {
+        const d = e.detail || {};
+        setCompactMode(!!d.compactMode);
+      } catch (err) {}
+    };
+    window.addEventListener('appSettingsChanged', handler);
+    return () => window.removeEventListener('appSettingsChanged', handler);
+  }, []);
+
   return (
     <MsalProvider instance={msalInstance}>
-      <div className="dashboard-root">
+      <div className={`dashboard-root ${compactMode ? 'compact' : ''}`}>
         <SidebarMenu />
         <main className="main-content">
           <M365Profile />

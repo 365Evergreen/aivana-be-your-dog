@@ -7,7 +7,10 @@ import {
   Bot24Regular,
   Shield24Regular
 } from "@fluentui/react-icons";
+import { Nav } from '@fluentui/react';
 import { FaGithub } from "react-icons/fa";
+import SignInStatus from '../common/SignInStatus';
+import SettingsModal from '../SettingsModal';
 
 const BASE_URL = "https://365evergreen.github.io/aivana-be-your-dog";
 
@@ -21,25 +24,28 @@ const navLinks = [
 ];
 
 export default function SidebarMenu() {
+  const [settingsOpen, setSettingsOpen] = React.useState(false);
+  const groups = [
+    {
+      links: navLinks.map((l) => ({ name: l.label, url: l.to, key: l.label })),
+    },
+  ];
+
   return (
     <nav className="sidebar-menu">
       <div className="sidebar-user">
-        <div className="avatar" />
+        <SignInStatus />
       </div>
-      <ul>
-        {navLinks.map(item => (
-          <li key={item.to}>
-            <a href={item.to}>
-              {item.icon}
-              {item.label}
-            </a>
-          </li>
-        ))}
-      </ul>
+      <Nav groups={groups} />
+      <div style={{ marginTop: 12 }}>
+        <button className="btn-link" onClick={() => setSettingsOpen(true)}>Settings</button>
+        <SettingsModal open={settingsOpen} onClose={() => setSettingsOpen(false)} />
+      </div>
       <a
         href="https://github.com/365evergreen/aivana-be-your-dog"
         target="_blank"
         rel="noopener noreferrer"
+        style={{ display: 'inline-flex', alignItems: 'center', marginTop: 12 }}
       >
         <FaGithub style={{ verticalAlign: "middle", marginRight: 8 }} /> GitHub
       </a>
