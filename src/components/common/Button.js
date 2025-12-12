@@ -1,9 +1,9 @@
 import React from 'react';
+import { PrimaryButton, DefaultButton } from '@fluentui/react';
 
-export default function Button({ children, ...props }) {
-  return (
-    <button {...props} className="btn">
-      {children}
-    </button>
-  );
+export default function Button({ children, variant, ...props }) {
+  if (variant === 'primary') {
+    return <PrimaryButton {...props}>{children}</PrimaryButton>;
+  }
+  return <DefaultButton {...props}>{children}</DefaultButton>;
 }

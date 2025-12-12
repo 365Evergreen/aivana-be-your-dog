@@ -4,6 +4,7 @@ import { loginRequest } from '../msalConfig';
 import { Client } from '@microsoft/microsoft-graph-client';
 import { Link } from 'react-router-dom';
 import AIAssistant from '../components/AIAssistant';
+import { Stack, Text, PrimaryButton, DefaultButton } from '@fluentui/react';
 
 export default function Dashboard() {
   const { instance, accounts } = useMsal();
@@ -73,17 +74,17 @@ export default function Dashboard() {
   return (
     <div className="dashboard-main" style={{background:'#f8f9fa',minHeight:'100vh',padding:'0 0 40px 0',position:'relative'}}>
       {/* Navigation Bar */}
-      <nav style={{display:'flex',alignItems:'center',justifyContent:'space-between',background:'#fff',padding:'18px 40px',boxShadow:'0 2px 8px rgba(0,0,0,0.04)',marginBottom:32}}>
-        <div style={{display:'flex',alignItems:'center',gap:24}}>
+      <Stack horizontal horizontalAlign="space-between" verticalAlign="center" styles={{ root: { background: '#fff', padding: '18px 40px', boxShadow: '0 2px 8px rgba(0,0,0,0.04)', marginBottom: 32 } }}>
+        <Stack horizontal tokens={{ childrenGap: 24 }} verticalAlign="center">
           <a href="https://github.com/365Evergreen/aivana-be-your-dog" style={{fontWeight:700,fontSize:22,color:'#2563eb',textDecoration:'none',letterSpacing:'-1px'}}>Be Your Dog</a>
           <Link to="/dashboard" style={{color:'#222',textDecoration:'none',fontWeight:500}}>Dashboard</Link>
           <Link to="/calendar" style={{color:'#222',textDecoration:'none',fontWeight:500}}>Calendar</Link>
           <Link to="/email" style={{color:'#222',textDecoration:'none',fontWeight:500}}>Email</Link>
           <Link to="/files" style={{color:'#222',textDecoration:'none',fontWeight:500}}>Files</Link>
           <Link to="/admin" style={{color:'#222',textDecoration:'none',fontWeight:500}}>Admin</Link>
-        </div>
-        <div style={{fontSize:15,color:'#888'}}>Brisbane time: {getBrisbaneTime()}</div>
-      </nav>
+        </Stack>
+        <Text variant="small" styles={{ root: { color: '#888' } }}>Brisbane time: {getBrisbaneTime()}</Text>
+      </Stack>
       {/* Header */}
       <div style={{maxWidth:1200,margin:'0 auto',padding:'0 24px'}}>
         <div style={{display:'flex',alignItems:'center',justifyContent:'space-between',marginBottom:32}}>
@@ -93,32 +94,32 @@ export default function Dashboard() {
           </div>
         </div>
         {/* Widgets Row */}
-        <div style={{display:'flex',gap:24,marginBottom:32}}>
-          <div style={{flex:1,background:'#fff',borderRadius:16,boxShadow:'0 2px 8px rgba(0,0,0,0.04)',padding:24,display:'flex',flexDirection:'column',alignItems:'flex-start'}}>
+        <Stack horizontal tokens={{ childrenGap: 24 }} styles={{ root: { marginBottom: 32 } }}>
+          <Stack styles={{ root: { flex: 1, background: '#fff', borderRadius: 16, boxShadow: '0 2px 8px rgba(0,0,0,0.04)', padding: 24 } }}>
             <div style={{fontSize:32,marginBottom:8,background:'#e8f0fe',color:'#2563eb',borderRadius:8,padding:'8px 12px'}}>📧</div>
             <div style={{fontWeight:600,fontSize:18,marginBottom:4}}>Unread Emails</div>
             <div style={{fontSize:28,fontWeight:700,marginBottom:2}}>{emails.length}</div>
             <div style={{color:'#888',fontSize:15}}>{emails[0]?.subject || ''}</div>
-          </div>
-          <div style={{flex:1,background:'#fff',borderRadius:16,boxShadow:'0 2px 8px rgba(0,0,0,0.04)',padding:24,display:'flex',flexDirection:'column',alignItems:'flex-start'}}>
+          </Stack>
+          <Stack styles={{ root: { flex: 1, background: '#fff', borderRadius: 16, boxShadow: '0 2px 8px rgba(0,0,0,0.04)', padding: 24 } }}>
             <div style={{fontSize:32,marginBottom:8,background:'#e6f4ea',color:'#22c55e',borderRadius:8,padding:'8px 12px'}}>📅</div>
             <div style={{fontWeight:600,fontSize:18,marginBottom:4}}>Today's Meetings</div>
             <div style={{fontSize:28,fontWeight:700,marginBottom:2}}>{events.length}</div>
             <div style={{color:'#888',fontSize:15}}>{events[0]?.subject || ''}</div>
-          </div>
-          <div style={{flex:1,background:'#fff',borderRadius:16,boxShadow:'0 2px 8px rgba(0,0,0,0.04)',padding:24,display:'flex',flexDirection:'column',alignItems:'flex-start'}}>
+          </Stack>
+          <Stack styles={{ root: { flex: 1, background: '#fff', borderRadius: 16, boxShadow: '0 2px 8px rgba(0,0,0,0.04)', padding: 24 } }}>
             <div style={{fontSize:32,marginBottom:8,background:'#f3e8ff',color:'#a259ec',borderRadius:8,padding:'8px 12px'}}>📄</div>
             <div style={{fontWeight:600,fontSize:18,marginBottom:4}}>Recent Files</div>
             <div style={{fontSize:28,fontWeight:700,marginBottom:2}}>{files.length}</div>
             <div style={{color:'#888',fontSize:15}}>{files[0]?.name || ''}</div>
-          </div>
-          <div style={{flex:1,background:'#fff',borderRadius:16,boxShadow:'0 2px 8px rgba(0,0,0,0.04)',padding:24,display:'flex',flexDirection:'column',alignItems:'flex-start'}}>
+          </Stack>
+          <Stack styles={{ root: { flex: 1, background: '#fff', borderRadius:16, boxShadow:'0 2px 8px rgba(0,0,0,0.04)', padding:24 } }}>
             <div style={{fontSize:32,marginBottom:8,background:'#fff7e6',color:'#f59e42',borderRadius:8,padding:'8px 12px'}}>👥</div>
             <div style={{fontWeight:600,fontSize:18,marginBottom:4}}>Team Updates</div>
             <div style={{fontSize:28,fontWeight:700,marginBottom:2}}>-</div>
             <div style={{color:'#888',fontSize:15}}>-</div>
-          </div>
-        </div>
+          </Stack>
+        </Stack>
         {/* Main Sections */}
         <div style={{display:'flex',gap:24,marginBottom:32}}>
           <div style={{flex:2,background:'#fff',borderRadius:16,boxShadow:'0 2px 8px rgba(0,0,0,0.04)',padding:24}}>
@@ -163,7 +164,7 @@ export default function Dashboard() {
         <div style={{background:'#fff',borderRadius:16,boxShadow:'0 2px 8px rgba(0,0,0,0.04)',padding:24}}>
           <div style={{display:'flex',alignItems:'center',justifyContent:'space-between',marginBottom:16}}>
             <h2 style={{fontWeight:700,fontSize:22,margin:0}}>Recent Files & Documents</h2>
-            <button disabled title="Coming soon" style={{background:'#eee',color:'#aaa',border:'none',borderRadius:6,padding:'8px 18px',fontWeight:500,cursor:'not-allowed'}}>Browse OneDrive</button>
+            <DefaultButton disabled title="Coming soon" styles={{ root: { background: '#eee', color: '#aaa', border: 'none', borderRadius: 6, padding: '8px 18px', fontWeight: 500 } }}>Browse OneDrive</DefaultButton>
           </div>
           <div style={{display:'flex',gap:24,flexWrap:'wrap'}}>
             {files.map(file => (
@@ -177,20 +178,20 @@ export default function Dashboard() {
         </div>
       </div>
       {/* Copilot Floating Button */}
-      <button
+      <PrimaryButton
         onClick={() => setShowCopilot(true)}
-        style={{position:'fixed',bottom:32,right:32,zIndex:1000,background:'#2563eb',color:'#fff',border:'none',borderRadius:'50%',width:64,height:64,boxShadow:'0 4px 16px rgba(37,99,235,0.15)',display:'flex',alignItems:'center',justifyContent:'center',fontSize:32,cursor:'pointer'}}
-        aria-label="Open Copilot Assistant"
+        ariaLabel="Open Copilot Assistant"
+        styles={{ root: { position: 'fixed', bottom: 32, right: 32, zIndex: 1000, background: '#2563eb', color: '#fff', borderRadius: '50%', width: 64, height: 64, minWidth: 64, boxShadow: '0 4px 16px rgba(37,99,235,0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 32 } }}
       >
         <span role="img" aria-label="Copilot">🤖</span>
-      </button>
+      </PrimaryButton>
       {/* Copilot Modal */}
       {showCopilot && (
         <div style={{position:'fixed',top:0,left:0,width:'100vw',height:'100vh',background:'rgba(0,0,0,0.25)',zIndex:1100,display:'flex',alignItems:'center',justifyContent:'center'}}>
           <div style={{background:'#fff',borderRadius:16,boxShadow:'0 8px 32px rgba(0,0,0,0.18)',padding:0,maxWidth:520,width:'90vw',maxHeight:'90vh',display:'flex',flexDirection:'column',overflow:'hidden',position:'relative'}}>
             <div style={{display:'flex',alignItems:'center',justifyContent:'space-between',padding:'18px 24px',borderBottom:'1px solid #f0f0f0',background:'#f8f9fa'}}>
               <span style={{fontWeight:700,fontSize:20,color:'#2563eb'}}>Copilot Assistant</span>
-              <button onClick={() => setShowCopilot(false)} style={{background:'none',border:'none',fontSize:22,cursor:'pointer',color:'#888'}} aria-label="Close">×</button>
+              <DefaultButton onClick={() => setShowCopilot(false)} styles={{ root: { background: 'none', border: 'none', fontSize: 22, cursor: 'pointer', color: '#888' } }} ariaLabel="Close">×</DefaultButton>
             </div>
             <div style={{flex:1,overflow:'auto',padding:24}}>
               <AIAssistant />

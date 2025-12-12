@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { PrimaryButton, DefaultButton } from '@fluentui/react';
 import '../assets/styles/AdminPages.css';
 
 // Sample initial pages data
@@ -84,12 +85,7 @@ export default function AdminPagesPage() {
       <div className="admin-pages-header">
         <h1>Page Manager</h1>
         <p>Create and manage site pages</p>
-        <button 
-          className="create-page-button"
-          onClick={handleCreatePage}
-        >
-          <span>+</span> Create Page
-        </button>
+        <PrimaryButton className="create-page-button" onClick={handleCreatePage}><span style={{marginRight:8}}>+</span>Create Page</PrimaryButton>
       </div>
 
       {showForm ? (
@@ -144,19 +140,9 @@ function PageCard({ page, onEdit, onDelete }) {
       </div>
       
       <div className="page-actions">
-        <button className="view-button">View</button>
-        <button 
-          className="edit-button"
-          onClick={() => onEdit(page)}
-        >
-          Edit
-        </button>
-        <button 
-          className="delete-button"
-          onClick={() => onDelete(page.id)}
-        >
-          Delete
-        </button>
+        <DefaultButton className="view-button">View</DefaultButton>
+        <DefaultButton className="edit-button" onClick={() => onEdit(page)}>Edit</DefaultButton>
+        <DefaultButton className="delete-button" onClick={() => onDelete(page.id)}>Delete</DefaultButton>
       </div>
     </div>
   );
@@ -254,12 +240,8 @@ function PageForm({ page, isEditing, onSave, onCancel }) {
         </div>
         
         <div className="form-actions">
-          <button type="button" className="cancel-button" onClick={onCancel}>
-            Cancel
-          </button>
-          <button type="submit" className="save-button">
-            {isEditing ? 'Update Page' : 'Create Page'}
-          </button>
+          <DefaultButton type="button" className="cancel-button" onClick={onCancel}>Cancel</DefaultButton>
+          <PrimaryButton type="submit" className="save-button">{isEditing ? 'Update Page' : 'Create Page'}</PrimaryButton>
         </div>
       </form>
     </div>

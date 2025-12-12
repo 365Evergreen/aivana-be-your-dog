@@ -72,3 +72,36 @@ body {
 /* Small helpers */
 .btn-primary:focus,.btn-link:focus{outline:2px solid rgba(0,99,177,0.2)}
 
+/* Responsive & collapsible sidebar styles */
+.sidebar-menu{
+  position:fixed;
+  left:0;
+  top:0;
+  bottom:0;
+  width:240px;
+  transition:width .18s ease, transform .18s ease;
+  z-index:100;
+}
+.sidebar-menu.collapsed{width:64px}
+.sidebar-menu .nav-text{display:inline-block;transition:opacity .15s ease;margin-left:8px}
+.sidebar-menu.collapsed .nav-text{opacity:0;height:0;width:0;overflow:hidden}
+.sidebar-links{padding:8px 0;margin:0}
+.sidebar-links .nav-link{padding:10px 8px}
+.sidebar-top{display:flex;align-items:center;justify-content:space-between}
+.collapse-toggle{background:transparent;border:0;padding:6px;border-radius:6px;cursor:pointer}
+.sidebar-footer{position:absolute;bottom:16px;left:16px;right:16px}
+
+/* Mobile behavior: hide sidebar by default and provide hamburger */
+@media (max-width:639px){
+  .sidebar-menu{transform:translateX(-110%);box-shadow:0 8px 24px rgba(0,0,0,0.24);}
+  .sidebar-menu.mobile-open{transform:translateX(0)}
+  .sidebar-hamburger{position:fixed;left:12px;top:12px;z-index:120;background:#fff;border:0;padding:8px;border-radius:8px;box-shadow:0 4px 12px rgba(0,0,0,0.08);}
+  .sidebar-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.35);z-index:110}
+}
+
+/* Ensure main content offset when sidebar present */
+@media (min-width:640px){
+  .main-content{margin-left:240px}
+  .sidebar-menu.collapsed + .main-content, .dashboard-root.compact .main-content{margin-left:72px}
+}
+
