@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { useMsal, useIsAuthenticated } from '@azure/msal-react';
 import { loginRequest } from '../msalConfig';
 import { Client } from '@microsoft/microsoft-graph-client';
-import 'isomorphic-fetch';
 import { Link } from 'react-router-dom';
 import AIAssistant from '../components/AIAssistant';
 
