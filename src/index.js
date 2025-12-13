@@ -37,6 +37,21 @@ async function bootstrap() {
     console.error('MSAL initialization failed:', e);
   }
 
+  // If the app is currently embedded inside an iframe, break out to the top-level window
+  // to ensure authentication flows run at top-level (avoid iframe sandbox/COOP issues).
+  try {
+    if (typeof window !== 'undefined' && window.self !== window.top) {
+      // avoid infinite loop for embedded widgets by only breaking out for our known origin
+      const allowedOrigin = new URL(msalInstance.config.auth.redirectUri).origin;
+      if (window.top && window.location && window.location.origin === allowedOrigin) {
+        window.top.location.href = window.location.href;
+        return; // stop bootstrapping until top has reloaded
+      }
+    }
+  } catch (e) {
+    // ignore cross-origin access errors
+  }
+
   ReactDOM.render(
     <HashRouter>
       <App />

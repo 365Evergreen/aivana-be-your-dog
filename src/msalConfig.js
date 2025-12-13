@@ -26,3 +26,7 @@ export const loginRequest = {
     "https://org75c51f0f.crm6.dynamics.com/user_impersonation",
   ],
 };
+
+// Expose short helpers used by auth helpers
+export const msalAuthority = msalConfig.auth.authority;
+export const msalRedirectUri = msalConfig.auth.redirectUri;
