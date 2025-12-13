@@ -9,7 +9,7 @@
   width: 56px;
   height: 56px;
   border-radius: 50%;
-  background-color: #0078d4;
+  background-color: var(--fluent-info);
   border: none;
   box-shadow: 0 2px 12px rgba(0, 0, 0, 0.2);
   cursor: pointer;
@@ -21,7 +21,7 @@
 
 .bot-launcher:hover {
   transform: scale(1.05);
-  background-color: #106ebe;
+  background-color: color-mix(in srgb, var(--fluent-info) 85%, black 15%);
 }
 
 .bot-dialog {
@@ -30,7 +30,7 @@
   right: 0;
   width: 350px;
   height: 500px;
-  background: white;
+  background: var(--fluent-surface);
   border-radius: 8px;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
   overflow: hidden;
@@ -40,8 +40,8 @@
 
 .bot-header {
   padding: 12px 16px;
-  background-color: #0078d4;
-  color: white;
+  background-color: var(--fluent-info);
+  color: var(--fluent-bg);
   display: flex;
   justify-content: space-between;
   align-items: center;

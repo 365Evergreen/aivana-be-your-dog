@@ -54,7 +54,7 @@ body {
 /* Fluent UI button base class support (for PrimaryButton / DefaultButton) */
 .ms-Button.app-btn, .ms-Button.app-btn-primary, .ms-Button.app-btn-plain {
   padding:0; /* inner padding handled by .app-btn wrapper */
-  
+}
 
 /* Icon slot inside buttons */
 .btn-icon{display:inline-flex;align-items:center;justify-content:center}

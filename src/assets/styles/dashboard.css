@@ -23,7 +23,7 @@
   width: 48px;
   height: 48px;
   border-radius: 50%;
-  background: #e0e7ef;
+  background: var(--fluent-surface);
   margin-right: 16px;
 }
 .user-name {
@@ -32,7 +32,7 @@
 }
 .user-email {
   font-size: 0.95rem;
-  color: #888;
+  color: var(--fluent-muted);
 }
 .sidebar-menu ul {
   list-style: none;
@@ -47,14 +47,14 @@
   align-items: center;
   padding: 10px 16px;
   border-radius: 8px;
-  color: #222;
+  color: var(--fluent-text);
   text-decoration: none;
   font-weight: 500;
   transition: background 0.2s;
 }
 .sidebar-menu a.active, .sidebar-menu a:hover {
-  background: #2563eb;
-  color: #fff;
+  background: var(--fluent-info);
+  color: var(--fluent-bg);
 }
 .main-content {
   flex: 1;
@@ -70,12 +70,12 @@
   margin: 0 0 8px 0;
 }
 .dashboard-header p {
-  color: #555;
+  color: var(--fluent-muted);
   margin: 0;
 }
 .dashboard-header .last-updated {
   font-size: 0.95rem;
-  color: #888;
+  color: var(--fluent-muted);
 }
 .dashboard-widgets {
   display: flex;
@@ -166,7 +166,7 @@
   align-items: center;
   justify-content: space-between;
   padding: 12px 0;
-  border-bottom: 1px solid #f0f0f0;
+  border-bottom: 1px solid var(--fluent-border);
 }
 .schedule-item:last-child {
   border-bottom: none;
@@ -200,7 +200,7 @@
   align-items: center;
   justify-content: space-between;
   padding: 12px 0;
-  border-bottom: 1px solid #f0f0f0;
+  border-bottom: 1px solid var(--fluent-border);
 }
 .email-item:last-child {
   border-bottom: none;
@@ -222,12 +222,12 @@
   gap: 8px;
 }
 .email-time {
-  color: #888;
+  color: var(--fluent-muted);
   font-size: 0.95rem;
 }
 .email-priority {
-  background: #ff4d4f;
-  color: #fff;
+  background: var(--fluent-danger);
+  color: var(--fluent-bg);
   border-radius: 6px;
   padding: 2px 10px;
   font-size: 0.9rem;
@@ -256,7 +256,7 @@
   margin-bottom: 2px;
 }
 .file-shared {
-  color: #2563eb;
+  color: var(--fluent-info);
   font-size: 0.95rem;
 }
 .files-section-footer {

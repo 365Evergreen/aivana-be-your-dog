@@ -58,50 +58,50 @@ export default function Dashboard() {
   if (loading) {
     return (
       <div className="dashboard-loading" style={{display:'flex',justifyContent:'center',alignItems:'center',height:'60vh'}}>
-        <div className="loader" style={{border:'4px solid #f3f3f3',borderRadius:'50%',borderTop:'4px solid #2563eb',width:40,height:40,animation:'spin 1s linear infinite'}}></div>
+        <div className="loader" style={{border:'4px solid var(--fluent-surface)',borderRadius:'50%',borderTop:'4px solid var(--fluent-primary)',width:40,height:40,animation:'spin 1s linear infinite'}}></div>
         <style>{`@keyframes spin {0%{transform:rotate(0deg);}100%{transform:rotate(360deg);}}`}</style>
-        <span style={{marginLeft:16,fontSize:18,color:'#888'}}>Loading your workspace...</span>
+        <span style={{marginLeft:16,fontSize:18,color:'var(--fluent-muted)'}}>Loading your workspace...</span>
       </div>
     );
   }
 
   return (
-    <div className="dashboard-main" style={{background:'#f8f9fa',minHeight:'100vh',padding:'0 0 40px 0',position:'relative'}}>
+    <div className="dashboard-main" style={{minHeight:'100vh',padding:'0 0 40px 0',position:'relative'}}>
       {/* Top navigation removed — simplified header */}
       {/* Header */}
       <div style={{maxWidth:1200,margin:'0 auto',padding:'0 24px'}}>
         <div style={{display:'flex',alignItems:'center',justifyContent:'space-between',marginBottom:32}}>
           <div>
-            <h1 style={{fontWeight:700,fontSize:36,marginBottom:8,letterSpacing:'-1px',color:'#222'}}>Good morning!</h1>
-            <p style={{fontSize:18,color:'#666',margin:0}}>Here's what's happening with your Microsoft 365 workspace today.</p>
+            <h1 style={{fontWeight:700,fontSize:36,marginBottom:8,letterSpacing:'-1px'}}>Good morning!</h1>
+            <p style={{fontSize:18,margin:0}}>Here's what's happening with your Microsoft 365 workspace today.</p>
           </div>
         </div>
         {/* Widgets Row */}
         <Stack horizontal tokens={{ childrenGap: 24 }} styles={{ root: { marginBottom: 32 } }}>
-          <Stack styles={{ root: { flex: 1, background: '#fff', borderRadius: 16, boxShadow: '0 2px 8px rgba(0,0,0,0.04)', padding: 24 } }}>
-            <div style={{fontSize:32,marginBottom:8,background:'#e8f0fe',color:'#2563eb',borderRadius:8,padding:'8px 12px'}}>📧</div>
-            <div style={{fontWeight:600,fontSize:18,marginBottom:4}}>Unread Emails</div>
-            <div style={{fontSize:28,fontWeight:700,marginBottom:2}}>{emails.length}</div>
-            <div style={{color:'#888',fontSize:15}}>{emails[0]?.subject || ''}</div>
-          </Stack>
-          <Stack styles={{ root: { flex: 1, background: '#fff', borderRadius: 16, boxShadow: '0 2px 8px rgba(0,0,0,0.04)', padding: 24 } }}>
-            <div style={{fontSize:32,marginBottom:8,background:'#e6f4ea',color:'#22c55e',borderRadius:8,padding:'8px 12px'}}>📅</div>
-            <div style={{fontWeight:600,fontSize:18,marginBottom:4}}>Today's Meetings</div>
-            <div style={{fontSize:28,fontWeight:700,marginBottom:2}}>{events.length}</div>
-            <div style={{color:'#888',fontSize:15}}>{events[0]?.subject || ''}</div>
-          </Stack>
-          <Stack styles={{ root: { flex: 1, background: '#fff', borderRadius: 16, boxShadow: '0 2px 8px rgba(0,0,0,0.04)', padding: 24 } }}>
-            <div style={{fontSize:32,marginBottom:8,background:'#f3e8ff',color:'#a259ec',borderRadius:8,padding:'8px 12px'}}>📄</div>
-            <div style={{fontWeight:600,fontSize:18,marginBottom:4}}>Recent Files</div>
-            <div style={{fontSize:28,fontWeight:700,marginBottom:2}}>{files.length}</div>
-            <div style={{color:'#888',fontSize:15}}>{files[0]?.name || ''}</div>
-          </Stack>
-          <Stack styles={{ root: { flex: 1, background: '#fff', borderRadius:16, boxShadow:'0 2px 8px rgba(0,0,0,0.04)', padding:24 } }}>
-            <div style={{fontSize:32,marginBottom:8,background:'#fff7e6',color:'#f59e42',borderRadius:8,padding:'8px 12px'}}>👥</div>
-            <div style={{fontWeight:600,fontSize:18,marginBottom:4}}>Team Updates</div>
-            <div style={{fontSize:28,fontWeight:700,marginBottom:2}}>-</div>
-            <div style={{color:'#888',fontSize:15}}>-</div>
-          </Stack>
+          <div className="widget-card">
+            <div className="widget-icon">📧</div>
+            <div className="widget-title">Unread Emails</div>
+            <div className="widget-value">{emails.length}</div>
+            <div className="widget-sub">{emails[0]?.subject || ''}</div>
+          </div>
+          <div className="widget-card">
+            <div className="widget-icon">📅</div>
+            <div className="widget-title">Today's Meetings</div>
+            <div className="widget-value">{events.length}</div>
+            <div className="widget-sub">{events[0]?.subject || ''}</div>
+          </div>
+          <div className="widget-card">
+            <div className="widget-icon">📄</div>
+            <div className="widget-title">Recent Files</div>
+            <div className="widget-value">{files.length}</div>
+            <div className="widget-sub">{files[0]?.name || ''}</div>
+          </div>
+          <div className="widget-card">
+            <div className="widget-icon">👥</div>
+            <div className="widget-title">Team Updates</div>
+            <div className="widget-value">-</div>
+            <div className="widget-sub">-</div>
+          </div>
         </Stack>
         {/* Main Sections */}
         <div style={{display:'flex',gap:24,marginBottom:32}}>
