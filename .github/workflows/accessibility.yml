@@ -19,17 +19,12 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '18'
-          cache: 'pnpm'
 
-      - name: Enable corepack (pnpm)
-        run: |
-          corepack enable
-
-      - name: Install dependencies
-        run: pnpm install --frozen-lockfile
+      - name: Install dependencies (npm)
+        run: npm ci
 
       - name: Build production bundle
-        run: pnpm build
+        run: npm run build --if-present
 
       - name: Serve build in background
         run: npx serve -s build -l 5000 &
