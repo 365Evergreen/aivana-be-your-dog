@@ -84,3 +84,31 @@ export async function deleteListItem(siteId, listId, itemId, { scopes } = {}) {
 }
 
 export default { getListItems, createListItem, updateListItem, deleteListItem };
+
+export async function updateItemFields(siteId, listId, itemId, fields, { scopes } = {}) {
+  const token = await graphToken(scopes || GRAPH.defaultScopes);
+  const url = `${GRAPH_BASE}/sites/${siteId}/lists/${listId}/items/${itemId}/fields`;
+  const res = await fetch(url, { method: 'PATCH', headers: graphHeaders(token), body: JSON.stringify(fields) });
+  if (!res.ok) throw new Error(`Graph updateItemFields failed: ${res.status} ${res.statusText}`);
+  return res.json();
+}
+
+export async function uploadAttachmentToListItem(siteId, listId, itemId, fileBlob, { scopes } = {}) {
+  const token = await graphToken(scopes || GRAPH.defaultScopes);
+  const arrayBuffer = await fileBlob.arrayBuffer();
+  let binary = '';
+  const bytes = new Uint8Array(arrayBuffer);
+  const chunkSize = 0x8000;
+  for (let i = 0; i < bytes.length; i += chunkSize) {
+    const slice = bytes.subarray(i, i + chunkSize);
+    binary += String.fromCharCode.apply(null, slice);
+  }
+  const base64 = btoa(binary);
+  const url = `${GRAPH_BASE}/sites/${siteId}/lists/${listId}/items/${itemId}/attachments`;
+  const body = { name: fileBlob.name || 'attachment', contentBytes: base64 };
+  const res = await fetch(url, { method: 'POST', headers: graphHeaders(token), body: JSON.stringify(body) });
+  if (!res.ok) throw new Error(`Graph uploadAttachmentToListItem failed: ${res.status} ${res.statusText}`);
+  return res.json();
+}
+
+export { getListItems, getListColumns, getListColumns as getColumns, getListItems as listItems, createListItem, updateListItem, deleteListItem };

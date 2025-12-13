@@ -154,8 +154,67 @@ export default function DynamicSharePointForm({ siteId = SHAREPOINT.siteId, list
     try {
       const fields = {};
       Object.keys(values).forEach(k => {
-        if (values[k] !== '' && values[k] !== null && values[k] !== undefined) fields[k] = values[k];
+          if (values[k] !== '' && values[k] !== null && values[k] !== undefined) {
+            const col = columns.find(c => c.name === k);
+            if (col && col.isPerson) return; // skip person for now
+            if (files && files[k]) return; // skip files
+            fields[k] = values[k];
+          }
       });
+        // separate person fields and files from regular scalar fields
+        const personFields = {};
+        for (const col of columns) {
+          if (col.isPerson && values[col.name]) {
+            // values store UPN/email from picker; searchUsers returned id earlier but we stored UPN
+            // try to resolve user id via searchUsers
+            try {
+              const users = await searchUsers(values[col.name]);
+              if (users && users.length > 0) {
+                personFields[col.name] = users[0].id;
+              }
+            } catch (e) {
+              // ignore
+            }
+          }
+        }
+
+        // create item with scalar fields first
+        const created = await createListItem(siteId, listId, fields);
+        // created may be an object with id in returned item or Location header; try to extract id
+        const itemId = (created && created.id) || (created && created.fields && created.fields.Id) || null;
+
+        // upload attachments to the created item
+        if (itemId) {
+          for (const fname of Object.keys(files)) {
+            const file = files[fname];
+            if (!file) continue;
+            await uploadAttachmentToListItem(siteId, listId, itemId, file);
+          }
+
+          // set person fields via fields PATCH using LookupId convention
+          for (const [colName, userId] of Object.entries(personFields)) {
+            const patch = {};
+            patch[`${colName}LookupId`] = userId;
+            try {
+              await updateItemFields(siteId, listId, itemId, patch);
+            } catch (e) {
+              // ignore patch errors for now
+            }
+          }
+        } else {
+          // fallback: if no itemId returned, still try to upload files to drive and set URLs in a field as before
+          for (const fname of Object.keys(files)) {
+            const file = files[fname];
+            if (!file) continue;
+            const driveId = SHAREPOINT.driveId;
+            const remoteName = `${Date.now()}_${file.name}`;
+            const uploaded = await uploadFileToDrive(driveId, remoteName, file);
+            fields[fname] = uploaded.webUrl || uploaded['webUrl'] || uploaded['@microsoft.graph.downloadUrl'] || uploaded['id'];
+          }
+          // create final item
+          await createListItem(siteId, listId, fields);
+        }
+        onSaved && onSaved();
       await createListItem(siteId, listId, fields);
       onSaved && onSaved();
     } catch (err) {
