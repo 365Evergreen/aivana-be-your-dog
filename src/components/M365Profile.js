@@ -1,8 +1,8 @@
 import React from 'react';
-import Button from './common/Button';
+// Button previously used for sign-in; profile is compact so button not needed here
 import { useMsal, useIsAuthenticated } from '@azure/msal-react';
 import { loginRequest } from '../msalConfig';
-import { acquireToken, logout, getAccount } from '../services/auth';
+import { acquireToken, getAccount } from '../services/auth';
 import { fetchGraph } from '../services/graph';
 
 // Lightweight profile component used in the dashboard header.
@@ -20,8 +20,7 @@ export default function M365Profile() {
     }
   }, [isAuthenticated, instance]);
 
-  const handleLogin = () => instance.loginPopup(loginRequest);
-  const handleLogout = () => logout();
+  // login/logout handled by `SignInStatus` in the sidebar; keep helpers available if needed
 
   React.useEffect(() => {
     let mounted = true;
@@ -41,20 +40,20 @@ export default function M365Profile() {
   }, [isAuthenticated, accounts]);
 
   if (!isAuthenticated) {
-    return <Button variant="primary" onClick={handleLogin}>Sign in</Button>;
+    return null;
   }
 
+  // Compact profile shown in header to avoid duplicate sign-out controls
   return (
-    <div style={{ margin: '1rem 0' }}>
+    <div style={{ display: 'flex', alignItems: 'center', gap: 12, margin: '8px 0' }}>
       {profile ? (
         <>
-          <h3>Welcome, {profile.displayName}</h3>
-          <p>{profile.mail || profile.userPrincipalName}</p>
+          <div style={{ fontWeight: 600, color: 'var(--fluent-text)' }}>{profile.displayName}</div>
+          <div style={{ fontSize: 12, color: 'var(--fluent-muted)' }}>{profile.mail || profile.userPrincipalName}</div>
         </>
       ) : (
-        <div>Loading profile...</div>
+        <div style={{ color: 'var(--fluent-muted)' }}>Loading profile...</div>
       )}
-      <Button onClick={handleLogout} className="ml-8">Sign out</Button>
     </div>
   );
 }

@@ -6,8 +6,8 @@
 }
 .sidebar-menu {
   width: 250px;
-  background: #fff;
-  border-right: 1px solid #e5e7eb;
+  background: var(--fluent-bg);
+  border-right: 1px solid var(--fluent-border);
   padding: 24px 0 0 0;
   display: flex;
   flex-direction: column;
@@ -60,6 +60,7 @@
   flex: 1;
   padding: 16px 20px;
   background: transparent;
+  color: var(--fluent-text);
 }
 .dashboard-header {
   margin-bottom: 16px;
@@ -83,7 +84,7 @@
 }
 .widget-card {
   flex: 1;
-  background: #fff;
+  background: var(--fluent-surface);
   border-radius: 16px;
   box-shadow: 0 2px 8px rgba(0,0,0,0.03);
   padding: 24px 24px 16px 24px;
@@ -112,7 +113,7 @@
   margin-bottom: 4px;
 }
 .widget-card .widget-sub {
-  color: #888;
+  color: var(--fluent-muted);
   font-size: 0.95rem;
 }
 .dashboard-sections {
@@ -121,7 +122,7 @@
   margin-bottom: 32px;
 }
 .section-card {
-  background: #fff;
+  background: var(--fluent-surface);
   border-radius: 16px;
   box-shadow: 0 2px 8px rgba(0,0,0,0.03);
   padding: 24px;
@@ -140,10 +141,11 @@
   font-size: 1.1rem;
   font-weight: 600;
   margin: 0;
+  color: var(--fluent-text);
 }
 .section-header button {
-  background: #2563eb;
-  color: #fff;
+  background: var(--fluent-primary);
+  color: var(--fluent-bg);
   border: none;
   border-radius: 6px;
   padding: 6px 16px;
@@ -152,7 +154,7 @@
   transition: background 0.2s;
 }
 .section-header button:hover {
-  background: #1741a6;
+  opacity: 0.95;
 }
 .schedule-list {
   margin: 0;
@@ -177,12 +179,12 @@
   font-weight: 500;
 }
 .schedule-meta {
-  color: #888;
+  color: var(--fluent-muted);
   font-size: 0.95rem;
 }
 .schedule-status {
-  background: #e0e7ef;
-  color: #2563eb;
+  background: var(--fluent-surface);
+  color: var(--fluent-primary);
   border-radius: 6px;
   padding: 2px 10px;
   font-size: 0.9rem;
@@ -211,7 +213,7 @@
   font-weight: 500;
 }
 .email-subject {
-  color: #888;
+  color: var(--fluent-muted);
   font-size: 0.95rem;
 }
 .email-meta {
@@ -236,7 +238,7 @@
   gap: 16px;
 }
 .file-card {
-  background: #f8fafc;
+  background: var(--fluent-surface);
   border-radius: 10px;
   padding: 16px 20px;
   display: flex;
@@ -249,7 +251,7 @@
   margin-bottom: 4px;
 }
 .file-meta {
-  color: #888;
+  color: var(--fluent-muted);
   font-size: 0.95rem;
   margin-bottom: 2px;
 }
@@ -263,9 +265,9 @@
   margin-top: 8px;
 }
 .files-section-footer button {
-  background: #fff;
-  color: #2563eb;
-  border: 1px solid #2563eb;
+  background: transparent;
+  color: var(--fluent-primary);
+  border: 1px solid var(--fluent-primary);
   border-radius: 6px;
   padding: 6px 16px;
   font-size: 0.95rem;
@@ -273,6 +275,22 @@
   transition: background 0.2s, color 0.2s;
 }
 .files-section-footer button:hover {
-  background: #2563eb;
-  color: #fff;
+  background: var(--fluent-primary);
+  color: var(--fluent-bg);
+}
+
+/* Responsive layout: stack widgets and sections on small screens */
+@media (max-width: 900px) {
+  .dashboard-widgets { flex-wrap: wrap; }
+  .widget-card { flex-basis: calc(50% - 12px); }
+  .dashboard-sections { flex-direction: column; }
+  .section-card { width: 100%; }
+  .files-list { overflow-x: auto; }
+  .main-content { padding: 12px; }
+}
+
+@media (max-width: 640px) {
+  .widget-card { flex-basis: 100%; }
+  .sidebar-menu { transform: translateX(-110%); }
+  .main-content { margin-left: 0; padding: 12px; }
 }
