@@ -4,7 +4,7 @@ import { MsalProvider } from "@azure/msal-react";
 import {
   Routes,
   Route,
-  NavLink,
+  
 } from "react-router-dom";
 
 import { msalInstance } from "./services/msalInstance";
@@ -69,8 +69,8 @@ function App() {
           palette: {
             themePrimary: '#2b88d8',
             neutralPrimary: '#e6e6e6',
-            neutralLighterAlt: '#1b1b1d',
-            white: '#0b0b0b'
+            neutralLighterAlt: '#2B2B2B',
+            white: '#2B2B2B'
           }
         });
       } else {
@@ -79,8 +79,8 @@ function App() {
           palette: {
             themePrimary: '#0063b1',
             neutralPrimary: '#222222',
-            neutralLighterAlt: '#f3f2f1',
-            white: '#ffffff'
+            neutralLighterAlt: '#F7F7F7',
+            white: '#F7F7F7'
           }
         });
       }

@@ -2,13 +2,14 @@
 body {
   margin: 0;
   font-family: 'Segoe UI', Arial, sans-serif;
-  background: #f4f6fa;
-  color: #222;
+  background: var(--fluent-bg);
+  color: var(--fluent-text);
 }
 
 /* Fluent-like tokens and utilities (lightweight) */
 :root{
-  --fluent-bg:#ffffff;
+  --fluent-bg:#F7F7F7;
+  --fluent-text:#222222;
   --fluent-muted:#666666;
   --fluent-primary:#0063b1;
   --fluent-surface:#f3f2f1;
@@ -151,13 +152,14 @@ body {
 
 /* Dark theme variables */
 :root[data-theme='dark']{
-  --fluent-bg:#1b1b1d;
+  --fluent-bg:#2B2B2B;
+  --fluent-text:#e6e6e6;
   --fluent-muted:#bfbfbf;
   --fluent-primary:#2b88d8;
-  --fluent-surface:#2b2b2d;
+  --fluent-surface:#272727;
   --fluent-border:#333337;
 }
-.theme-dark body, :root.theme-dark body { background: #121212; color: #e6e6e6; }
+.theme-dark body, :root.theme-dark body { background: var(--fluent-bg); color: var(--fluent-text); }
 
 /* Ensure app buttons adapt to dark theme using variables */
 :root[data-theme='dark'] .app-btn{ background:var(--fluent-surface); color:var(--fluent-muted); }

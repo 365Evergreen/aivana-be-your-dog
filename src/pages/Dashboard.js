@@ -4,7 +4,7 @@ import { loginRequest } from '../msalConfig';
 import { Client } from '@microsoft/microsoft-graph-client';
 import { Link } from 'react-router-dom';
 import AIAssistant from '../components/AIAssistant';
-import { Stack, Text } from '@fluentui/react';
+import { Stack } from '@fluentui/react';
 import Button from '../components/common/Button';
 
 export default function Dashboard() {
@@ -54,14 +54,7 @@ export default function Dashboard() {
     fetchData();
   }, [isAuthenticated, accounts, instance]);
 
-  // Get current time in Brisbane (Australia/Brisbane)
-  const getBrisbaneTime = () => {
-    try {
-      return new Date().toLocaleTimeString('en-AU', { timeZone: 'Australia/Brisbane', hour: '2-digit', minute: '2-digit', second: '2-digit' });
-    } catch {
-      return new Date().toLocaleTimeString();
-    }
-  };
+  // (Removed unused getBrisbaneTime helper)
   if (loading) {
     return (
       <div className="dashboard-loading" style={{display:'flex',justifyContent:'center',alignItems:'center',height:'60vh'}}>

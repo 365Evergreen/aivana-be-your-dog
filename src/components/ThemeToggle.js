@@ -41,10 +41,10 @@ export default function ThemeToggle(){
     try{
       if (darkMode){
         document.documentElement.setAttribute('data-theme','dark');
-        loadTheme({ palette: { themePrimary: '#2b88d8', neutralPrimary: '#e6e6e6', neutralLighterAlt: '#1b1b1d', white: '#0b0b0b' } });
+        loadTheme({ palette: { themePrimary: '#2b88d8', neutralPrimary: '#e6e6e6', neutralLighterAlt: '#2B2B2B', white: '#2B2B2B' } });
       } else {
         document.documentElement.removeAttribute('data-theme');
-        loadTheme({ palette: { themePrimary: '#0063b1', neutralPrimary: '#222222', neutralLighterAlt: '#f3f2f1', white: '#ffffff' } });
+        loadTheme({ palette: { themePrimary: '#0063b1', neutralPrimary: '#222222', neutralLighterAlt: '#F7F7F7', white: '#F7F7F7' } });
       }
     }catch(e){}
   }
