@@ -12,5 +12,17 @@ export const msalConfig = {
 };
 
 export const loginRequest = {
-  scopes: ["User.Read", "Mail.Read", "Files.Read", "Calendars.Read"],
+  scopes: [
+    "openid",
+    "profile",
+    "offline_access",
+    "User.Read",
+    "User.ReadBasic.All",
+    "Mail.Read",
+    "Files.ReadWrite.All",
+    "Calendars.Read",
+    "Sites.ReadWrite.All",
+    // Dataverse delegated scope (configured in src/utils/apiConfig.js)
+    "https://org75c51f0f.crm6.dynamics.com/user_impersonation",
+  ],
 };
