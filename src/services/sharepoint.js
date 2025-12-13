@@ -23,6 +23,14 @@ export async function getListItems(siteId, listId, { scopes } = {}) {
   return res.json();
 }
 
+export async function getListColumns(siteId, listId, { scopes } = {}) {
+  const token = await graphToken(scopes || GRAPH.defaultScopes);
+  const url = `${GRAPH_BASE}/sites/${siteId}/lists/${listId}/columns`;
+  const res = await fetch(url, { headers: graphHeaders(token) });
+  if (!res.ok) throw new Error(`Graph getListColumns failed: ${res.status} ${res.statusText}`);
+  return res.json();
+}
+
 export async function createListItem(siteId, listId, fields, { scopes } = {}) {
   const token = await graphToken(scopes || GRAPH.defaultScopes);
   const url = `${GRAPH_BASE}/sites/${siteId}/lists/${listId}/items`;
