@@ -31,6 +31,33 @@ export async function getListColumns(siteId, listId, { scopes } = {}) {
   return res.json();
 }
 
+// Search users in the tenant by displayName (simple helper for people picker)
+export async function searchUsers(query, { scopes } = {}) {
+  if (!query || query.length < 2) return [];
+  const token = await graphToken(scopes || GRAPH.defaultScopes);
+  // use startsWith on displayName; ensure the app has User.ReadBasic.All or similar consent
+  const url = `${GRAPH_BASE}/users?$filter=startsWith(displayName,'${encodeURIComponent(query)}')&$select=id,displayName,mail,userPrincipalName&$top=10`;
+  const res = await fetch(url, { headers: graphHeaders(token) });
+  if (!res.ok) throw new Error(`Graph searchUsers failed: ${res.status} ${res.statusText}`);
+  const json = await res.json();
+  return Array.isArray(json.value) ? json.value : [];
+}
+
+// Upload a file blob to a drive and return the uploaded item metadata (webUrl etc.)
+export async function uploadFileToDrive(driveId, path, fileBlob, { scopes } = {}) {
+  if (!driveId) throw new Error('driveId is required to upload files');
+  const token = await graphToken(scopes || GRAPH.defaultScopes);
+  const filename = path.replace(/^\/+/, '');
+  const url = `${GRAPH_BASE}/drives/${driveId}/root:/${encodeURIComponent(filename)}:/content`;
+  const res = await fetch(url, {
+    method: 'PUT',
+    headers: Object.assign({}, graphHeaders(token), { 'Content-Type': fileBlob.type || 'application/octet-stream' }),
+    body: fileBlob,
+  });
+  if (!res.ok) throw new Error(`Graph uploadFileToDrive failed: ${res.status} ${res.statusText}`);
+  return res.json();
+}
+
 export async function createListItem(siteId, listId, fields, { scopes } = {}) {
   const token = await graphToken(scopes || GRAPH.defaultScopes);
   const url = `${GRAPH_BASE}/sites/${siteId}/lists/${listId}/items`;

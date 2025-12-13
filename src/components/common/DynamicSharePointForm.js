@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { getListColumns, createListItem } from '../../services/sharepoint';
 import { SHAREPOINT } from '../../utils/apiConfig';
+import { searchUsers, uploadFileToDrive } from '../../services/sharepoint';
 
 function renderInput(column, value, onChange) {
   const name = column.name;
@@ -40,11 +41,59 @@ function renderInput(column, value, onChange) {
     case 'dateTime':
     case 'date':
       return (
+  function renderPeoplePicker(column, value, onChange) {
+    const name = column.name;
+    const display = column.displayName || name;
+    const [query, setQuery] = useState('');
+    const [options, setOptions] = useState([]);
+
+    useEffect(() => {
+      let mounted = true;
+      async function search() {
+        if (!query || query.length < 2) return setOptions([]);
+        try {
+          const users = await searchUsers(query);
+          if (!mounted) return;
+          setOptions(users.map(u => ({ id: u.id, label: u.displayName || u.userPrincipalName, upn: u.userPrincipalName, mail: u.mail })));
+        } catch (e) {
+          // swallow search errors; options remain empty
+        }
+      }
+      search();
+      return () => { mounted = false; };
+    }, [query]);
+
+    return (
+      <div key={name} style={{ marginBottom: 8 }}>
+        <label>{display}</label>
+        <input placeholder="Search people..." value={query} onChange={(e) => setQuery(e.target.value)} />
+        <div style={{ maxHeight: 160, overflow: 'auto', border: '1px solid #ddd' }}>
+          {options.map(o => (
+            <div key={o.id} style={{ padding: 6, cursor: 'pointer' }} onClick={() => { onChange(name, o.upn || o.mail || o.label); setQuery(''); setOptions([]); }}>
+              {o.label} {o.mail ? `(${o.mail})` : ''}
+            </div>
+          ))}
+        </div>
+        <div style={{ fontSize: 12, color: '#666', marginTop: 6 }}>Selected: {value || 'none'}</div>
+      </div>
+    );
+  }
         <div key={name} style={{ marginBottom: 8 }}>
+  function renderFileInput(column, value, onFileSelected) {
+    const name = column.name;
+    const display = column.displayName || name;
+    return (
+      <div key={name} style={{ marginBottom: 8 }}>
+        <label>{display}</label>
+        <input type="file" accept="image/*" capture="environment" onChange={(e) => onFileSelected(name, e.target.files && e.target.files[0])} />
+      </div>
+    );
+  }
           <label>{display}{required ? ' *' : ''}</label>
           <input type="date" value={value || ''} onChange={(e) => onChange(name, e.target.value)} />
         </div>
       );
+    const [files, setFiles] = useState({});
     default:
       return (
         <div key={name} style={{ marginBottom: 8 }}>
@@ -82,6 +131,9 @@ export default function DynamicSharePointForm({ siteId = SHAREPOINT.siteId, list
         visible.forEach(c => { init[c.name] = ''; });
         setValues(init);
       } catch (err) {
+    function handleFileSelected(name, file) {
+      setFiles(f => ({ ...f, [name]: file }));
+    }
         setError(err.message || String(err));
       } finally {
         setLoading(false);
@@ -116,6 +168,8 @@ export default function DynamicSharePointForm({ siteId = SHAREPOINT.siteId, list
   if (loading) return <div>Loading form...</div>;
   if (error) return <div style={{ color: 'red' }}>Error: {error}</div>;
 
+        {columns.map(col => renderFileInput(col, files[col.name], handleFileSelected))}
+        {columns.map(col => renderPeoplePicker(col, values[col.name], handleChange))}
   return (
     <form onSubmit={handleSubmit}>
       {columns.map(col => renderInput(col, values[col.name], handleChange))}
