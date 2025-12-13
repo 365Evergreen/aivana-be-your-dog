@@ -38,8 +38,16 @@ export async function acquireToken(scopes = loginRequest.scopes) {
     return resp.accessToken;
   } catch (err) {
     // fall back to interactive if silent fails
-    // use redirect fallback; popup may be blocked in some environments
-    await msalInstance.acquireTokenRedirect(request);
+    // prefer popup when available (useful in test environments), otherwise redirect
+    if (typeof msalInstance.acquireTokenPopup === 'function') {
+      const resp = await msalInstance.acquireTokenPopup(request);
+      return resp && resp.accessToken ? resp.accessToken : null;
+    }
+    if (typeof msalInstance.acquireTokenRedirect === 'function') {
+      // redirect does not return a token immediately
+      await msalInstance.acquireTokenRedirect(request);
+      return null;
+    }
     return null;
   }
 }

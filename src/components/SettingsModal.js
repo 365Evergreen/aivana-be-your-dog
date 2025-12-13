@@ -1,6 +1,7 @@
 import React from 'react';
 import Modal from './common/Modal';
-import { Toggle, Stack, DefaultButton } from '@fluentui/react';
+import { Toggle, Stack } from '@fluentui/react';
+import Button from './common/Button';
 
 const SETTINGS_KEY = 'app.settings.v1';
 
@@ -68,7 +69,7 @@ export default function SettingsModal({ open, onClose }) {
           </Stack>
 
           <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: 6 }}>
-            <DefaultButton onClick={onClose}>Close</DefaultButton>
+            <Button onClick={onClose}>Close</Button>
           </div>
         </Stack>
       </div>

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { PrimaryButton, DefaultButton } from '@fluentui/react';
+import Button from '../components/common/Button';
 import '../assets/styles/AdminPages.css';
 
 // Sample initial pages data
@@ -85,7 +85,7 @@ export default function AdminPagesPage() {
       <div className="admin-pages-header">
         <h1>Page Manager</h1>
         <p>Create and manage site pages</p>
-        <PrimaryButton className="create-page-button" onClick={handleCreatePage}><span style={{marginRight:8}}>+</span>Create Page</PrimaryButton>
+        <Button variant="primary" className="create-page-button" onClick={handleCreatePage} icon={<span>+</span>}>Create Page</Button>
       </div>
 
       {showForm ? (
@@ -140,9 +140,9 @@ function PageCard({ page, onEdit, onDelete }) {
       </div>
       
       <div className="page-actions">
-        <DefaultButton className="view-button">View</DefaultButton>
-        <DefaultButton className="edit-button" onClick={() => onEdit(page)}>Edit</DefaultButton>
-        <DefaultButton className="delete-button" onClick={() => onDelete(page.id)}>Delete</DefaultButton>
+        <Button className="view-button">View</Button>
+        <Button className="edit-button" onClick={() => onEdit(page)}>Edit</Button>
+        <Button className="delete-button" onClick={() => onDelete(page.id)}>Delete</Button>
       </div>
     </div>
   );
@@ -240,8 +240,8 @@ function PageForm({ page, isEditing, onSave, onCancel }) {
         </div>
         
         <div className="form-actions">
-          <DefaultButton type="button" className="cancel-button" onClick={onCancel}>Cancel</DefaultButton>
-          <PrimaryButton type="submit" className="save-button">{isEditing ? 'Update Page' : 'Create Page'}</PrimaryButton>
+          <Button type="button" className="cancel-button" onClick={onCancel}>Cancel</Button>
+          <Button type="submit" className="save-button" variant="primary">{isEditing ? 'Update Page' : 'Create Page'}</Button>
         </div>
       </form>
     </div>

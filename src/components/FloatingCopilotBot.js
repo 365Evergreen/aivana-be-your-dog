@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import '../assets/styles/FloatingCopilotBot.css';
-import { PrimaryButton, DefaultButton } from '@fluentui/react';
+import Button from './common/Button';
 
 export default function FloatingCopilotBot() {
   const [isOpen, setIsOpen] = useState(false);
@@ -14,7 +14,7 @@ export default function FloatingCopilotBot() {
         <div className="bot-dialog">
           <div className="bot-header" style={{display:'flex',alignItems:'center',justifyContent:'space-between'}}>
             <h3>AI Assistant</h3>
-            <DefaultButton className="close-button" onClick={() => setIsOpen(false)} ariaLabel="Close">×</DefaultButton>
+            <Button className="close-button" onClick={() => setIsOpen(false)} ariaLabel="Close">×</Button>
           </div>
           <iframe
             src={botUrl}
@@ -25,16 +25,16 @@ export default function FloatingCopilotBot() {
           />
         </div>
       )}
-      <PrimaryButton
-        className="bot-launcher"
+      <Button
+        variant="primary"
+        className="copilot-fab"
         onClick={() => setIsOpen(!isOpen)}
         ariaLabel="Open AI Assistant"
-        styles={{ root: { borderRadius: '50%', width: 64, height: 64, minWidth: 64, display: 'flex', alignItems: 'center', justifyContent: 'center', position: 'fixed', bottom: 32, right: 32, zIndex: 1000 } }}
       >
         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
           <path d="M12 2C6.48 2 2 6.48 2 12C2 17.52 6.48 22 12 22C17.52 22 22 17.52 22 12C22 6.48 17.52 2 12 2ZM13 17H11V11H13V17ZM13 9H11V7H13V9Z" fill="white"/>
         </svg>
-      </PrimaryButton>
+      </Button>
     </div>
   );
 }

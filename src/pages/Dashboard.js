@@ -4,7 +4,8 @@ import { loginRequest } from '../msalConfig';
 import { Client } from '@microsoft/microsoft-graph-client';
 import { Link } from 'react-router-dom';
 import AIAssistant from '../components/AIAssistant';
-import { Stack, Text, PrimaryButton, DefaultButton } from '@fluentui/react';
+import { Stack, Text } from '@fluentui/react';
+import Button from '../components/common/Button';
 
 export default function Dashboard() {
   const { instance, accounts } = useMsal();
@@ -73,18 +74,7 @@ export default function Dashboard() {
 
   return (
     <div className="dashboard-main" style={{background:'#f8f9fa',minHeight:'100vh',padding:'0 0 40px 0',position:'relative'}}>
-      {/* Navigation Bar */}
-      <Stack horizontal horizontalAlign="space-between" verticalAlign="center" styles={{ root: { background: '#fff', padding: '18px 40px', boxShadow: '0 2px 8px rgba(0,0,0,0.04)', marginBottom: 32 } }}>
-        <Stack horizontal tokens={{ childrenGap: 24 }} verticalAlign="center">
-          <a href="https://github.com/365Evergreen/aivana-be-your-dog" style={{fontWeight:700,fontSize:22,color:'#2563eb',textDecoration:'none',letterSpacing:'-1px'}}>Be Your Dog</a>
-          <Link to="/dashboard" style={{color:'#222',textDecoration:'none',fontWeight:500}}>Dashboard</Link>
-          <Link to="/calendar" style={{color:'#222',textDecoration:'none',fontWeight:500}}>Calendar</Link>
-          <Link to="/email" style={{color:'#222',textDecoration:'none',fontWeight:500}}>Email</Link>
-          <Link to="/files" style={{color:'#222',textDecoration:'none',fontWeight:500}}>Files</Link>
-          <Link to="/admin" style={{color:'#222',textDecoration:'none',fontWeight:500}}>Admin</Link>
-        </Stack>
-        <Text variant="small" styles={{ root: { color: '#888' } }}>Brisbane time: {getBrisbaneTime()}</Text>
-      </Stack>
+      {/* Top navigation removed — simplified header */}
       {/* Header */}
       <div style={{maxWidth:1200,margin:'0 auto',padding:'0 24px'}}>
         <div style={{display:'flex',alignItems:'center',justifyContent:'space-between',marginBottom:32}}>
@@ -164,7 +154,7 @@ export default function Dashboard() {
         <div style={{background:'#fff',borderRadius:16,boxShadow:'0 2px 8px rgba(0,0,0,0.04)',padding:24}}>
           <div style={{display:'flex',alignItems:'center',justifyContent:'space-between',marginBottom:16}}>
             <h2 style={{fontWeight:700,fontSize:22,margin:0}}>Recent Files & Documents</h2>
-            <DefaultButton disabled title="Coming soon" styles={{ root: { background: '#eee', color: '#aaa', border: 'none', borderRadius: 6, padding: '8px 18px', fontWeight: 500 } }}>Browse OneDrive</DefaultButton>
+            <Button disabled className="btn-disabled" title="Coming soon">Browse OneDrive</Button>
           </div>
           <div style={{display:'flex',gap:24,flexWrap:'wrap'}}>
             {files.map(file => (
@@ -178,20 +168,21 @@ export default function Dashboard() {
         </div>
       </div>
       {/* Copilot Floating Button */}
-      <PrimaryButton
+      <Button
+        variant="primary"
         onClick={() => setShowCopilot(true)}
         ariaLabel="Open Copilot Assistant"
-        styles={{ root: { position: 'fixed', bottom: 32, right: 32, zIndex: 1000, background: '#2563eb', color: '#fff', borderRadius: '50%', width: 64, height: 64, minWidth: 64, boxShadow: '0 4px 16px rgba(37,99,235,0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 32 } }}
+        className="copilot-fab"
       >
         <span role="img" aria-label="Copilot">🤖</span>
-      </PrimaryButton>
+      </Button>
       {/* Copilot Modal */}
       {showCopilot && (
         <div style={{position:'fixed',top:0,left:0,width:'100vw',height:'100vh',background:'rgba(0,0,0,0.25)',zIndex:1100,display:'flex',alignItems:'center',justifyContent:'center'}}>
           <div style={{background:'#fff',borderRadius:16,boxShadow:'0 8px 32px rgba(0,0,0,0.18)',padding:0,maxWidth:520,width:'90vw',maxHeight:'90vh',display:'flex',flexDirection:'column',overflow:'hidden',position:'relative'}}>
             <div style={{display:'flex',alignItems:'center',justifyContent:'space-between',padding:'18px 24px',borderBottom:'1px solid #f0f0f0',background:'#f8f9fa'}}>
               <span style={{fontWeight:700,fontSize:20,color:'#2563eb'}}>Copilot Assistant</span>
-              <DefaultButton onClick={() => setShowCopilot(false)} styles={{ root: { background: 'none', border: 'none', fontSize: 22, cursor: 'pointer', color: '#888' } }} ariaLabel="Close">×</DefaultButton>
+              <Button onClick={() => setShowCopilot(false)} className="modal-close" ariaLabel="Close">×</Button>
             </div>
             <div style={{flex:1,overflow:'auto',padding:24}}>
               <AIAssistant />

@@ -1,5 +1,5 @@
 import React from "react";
-import { PrimaryButton, DefaultButton } from '@fluentui/react';
+import Button from '../components/common/Button';
 
 export default function AdminPage() {
   return (
@@ -40,10 +40,10 @@ export default function AdminPage() {
           </div>
         </div>
         <div style={{ display: "flex", gap: 16 }}>
-          <PrimaryButton styles={{ root: { background: '#2563eb', color: '#fff' } }}>Test SharePoint Connection</PrimaryButton>
-          <DefaultButton>Clear Cache</DefaultButton>
-          <DefaultButton>Export Configuration</DefaultButton>
-          <DefaultButton>View System Logs</DefaultButton>
+          <Button variant="primary">Test SharePoint Connection</Button>
+          <Button>Clear Cache</Button>
+          <Button>Export Configuration</Button>
+          <Button>View System Logs</Button>
         </div>
       </div>
       <div style={{ background: "#fff", borderRadius: 16, boxShadow: "0 2px 8px rgba(0,0,0,0.04)", padding: 32 }}>

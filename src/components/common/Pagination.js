@@ -1,11 +1,12 @@
 import React from 'react';
-import { DefaultButton, Text } from '@fluentui/react';
+import { Text } from '@fluentui/react';
+import Button from './Button';
 
 const Pagination = ({ page, totalPages, onPageChange }) => (
   <div className="pagination" style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-    <DefaultButton onClick={() => onPageChange(page - 1)} disabled={page === 1}>Prev</DefaultButton>
+    <Button onClick={() => onPageChange(page - 1)} disabled={page === 1}>Prev</Button>
     <Text>{page} / {totalPages}</Text>
-    <DefaultButton onClick={() => onPageChange(page + 1)} disabled={page === totalPages}>Next</DefaultButton>
+    <Button onClick={() => onPageChange(page + 1)} disabled={page === totalPages}>Next</Button>
   </div>
 );
 

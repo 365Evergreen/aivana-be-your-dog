@@ -1,5 +1,5 @@
 import React from 'react';
-import { PrimaryButton, DefaultButton } from '@fluentui/react';
+import Button from './common/Button';
 import { useMsal, useIsAuthenticated } from '@azure/msal-react';
 import { loginRequest } from '../msalConfig';
 import { acquireToken, logout, getAccount } from '../services/auth';
@@ -41,7 +41,7 @@ export default function M365Profile() {
   }, [isAuthenticated, accounts]);
 
   if (!isAuthenticated) {
-    return <PrimaryButton onClick={handleLogin}>Sign in</PrimaryButton>;
+    return <Button variant="primary" onClick={handleLogin}>Sign in</Button>;
   }
 
   return (
@@ -54,7 +54,7 @@ export default function M365Profile() {
       ) : (
         <div>Loading profile...</div>
       )}
-      <DefaultButton onClick={handleLogout} style={{ marginLeft: 8 }}>Sign out</DefaultButton>
+      <Button onClick={handleLogout} className="ml-8">Sign out</Button>
     </div>
   );
 }

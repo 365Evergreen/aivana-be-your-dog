@@ -13,7 +13,7 @@ import {
 import { FaGithub } from "react-icons/fa";
 import SignInStatus from '../common/SignInStatus';
 import SettingsModal from '../SettingsModal';
-import { DefaultButton } from '@fluentui/react';
+import Button from '../common/Button';
 
 const BASE_URL = "https://365evergreen.github.io/aivana-be-your-dog";
 
@@ -60,14 +60,13 @@ export default function SidebarMenu() {
             <SignInStatus />
           </div>
           <div className="sidebar-controls">
-            <button
+            <Button
               className="collapse-toggle"
               aria-label={collapsed ? 'Expand sidebar' : 'Collapse sidebar'}
               onClick={() => setCollapsed(s => !s)}
-              onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); setCollapsed(s => !s); } }}
-            >
-              {collapsed ? <ChevronRight24Regular /> : <ChevronLeft24Regular />}
-            </button>
+              icon={collapsed ? <ChevronRight24Regular /> : <ChevronLeft24Regular />}
+              variant="plain"
+            />
           </div>
         </div>
 
@@ -91,7 +90,7 @@ export default function SidebarMenu() {
 
         <div className="sidebar-footer">
           <div style={{ marginBottom: 8 }}>
-            <DefaultButton onClick={() => setSettingsOpen(true)}>Settings</DefaultButton>
+            <Button onClick={() => setSettingsOpen(true)}>Settings</Button>
             <SettingsModal open={settingsOpen} onClose={() => setSettingsOpen(false)} />
           </div>
           <a
@@ -105,9 +104,7 @@ export default function SidebarMenu() {
         </div>
       </div>
 
-      <button className="sidebar-hamburger" aria-label="Open sidebar" onClick={() => setMobileOpen(true)}>
-        <AppsRegular />
-      </button>
+      <Button className="sidebar-hamburger" aria-label="Open sidebar" onClick={() => setMobileOpen(true)} icon={<AppsRegular />} variant="plain" />
       {mobileOpen && <div className="sidebar-overlay" onClick={() => setMobileOpen(false)} />}
     </>
   );

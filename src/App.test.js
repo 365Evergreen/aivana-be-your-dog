@@ -70,5 +70,5 @@ jest.mock('react-router-dom', () => {
 test('renders App shell with mocked components', () => {
   render(<App />);
   expect(screen.getByText(/MockProfile/i)).toBeInTheDocument();
-  expect(screen.getByText(/Page Manager/i)).toBeInTheDocument();
+  expect(screen.getByText(/DashboardPage/i)).toBeInTheDocument();
 });

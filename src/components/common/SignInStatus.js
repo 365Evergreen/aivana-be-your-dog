@@ -1,6 +1,7 @@
 import React from 'react';
 import { getAccount, login, logout } from '../../services/auth';
-import { Persona, PersonaSize, PrimaryButton, DefaultButton } from '@fluentui/react';
+import { Persona, PersonaSize } from '@fluentui/react';
+import Button from './Button';
 
 export default function SignInStatus() {
   const [account, setAccount] = React.useState(getAccount());
@@ -26,16 +27,16 @@ export default function SignInStatus() {
   };
 
   if (!account) {
-    return <PrimaryButton text="Sign in" onClick={handleLogin} />;
+    return <Button variant="primary" onClick={handleLogin}>Sign in</Button>;
   }
 
   const display = account.name || account.username || account.homeAccountId || 'User';
   return (
-    <div className="sign-in-status" style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+    <div className="sign-in-status">
       <Persona text={display} size={PersonaSize.size32} />
       <div style={{ display: 'flex', flexDirection: 'column' }}>
         <div style={{ fontWeight: 600 }}>{display}</div>
-        <DefaultButton text="Sign out" onClick={handleLogout} />
+        <Button onClick={handleLogout}>Sign out</Button>
       </div>
     </div>
   );

@@ -18,6 +18,7 @@ import ChatPage from "./pages/ChatPage";
 import AdminPage from "./pages/AdminPage";
 import AdminPagesPage from "./pages/AdminPagesPage";
 import FloatingCopilotBot from './components/FloatingCopilotBot';
+import ThemeToggle from './components/ThemeToggle';
 
 import "./assets/styles/global.css";
 import "./assets/styles/dashboard.css";
@@ -89,10 +90,10 @@ function App() {
   return (
     <MsalProvider instance={msalInstance}>
       <div className={`dashboard-root ${compactMode ? 'compact' : ''}`}>
+        <ThemeToggle />
         <SidebarMenu />
         <main className="main-content">
           <M365Profile />
-          <NavLink to="/admin/pages">Page Manager</NavLink>
           <Routes>
             <Route path="/" element={<Dashboard />} />
             <Route path="/email" element={<EmailPage />} />

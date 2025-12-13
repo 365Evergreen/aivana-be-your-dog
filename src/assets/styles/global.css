@@ -17,20 +17,42 @@ body {
 }
 
 /* Buttons */
-.btn-primary{
-  background:var(--fluent-primary);
-  color:white;
+.app-btn{
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
   padding:8px 12px;
-  border-radius:4px;
-  border:0;
+  border-radius:var(--fluent-radius);
+  border:1px solid transparent;
   cursor:pointer;
-}
-.btn-link{
-  background:transparent;
-  border:0;
+  font-weight:600;
+  font-size:14px;
+  transition:background .12s ease, color .12s ease, border-color .12s ease, box-shadow .12s ease;
+  background:var(--fluent-surface);
   color:var(--fluent-primary);
-  cursor:pointer;
 }
+.app-btn-primary{
+  background:var(--fluent-primary);
+  color:var(--fluent-bg);
+  border-color:transparent;
+}
+.app-btn-plain{
+  background:transparent;
+  color:var(--fluent-primary);
+  border-color:transparent;
+}
+.app-btn:hover{box-shadow:0 2px 8px rgba(0,0,0,0.06)}
+
+/* Fluent UI button base class support (for PrimaryButton / DefaultButton) */
+.ms-Button.app-btn, .ms-Button.app-btn-primary, .ms-Button.app-btn-plain {
+  padding:0; /* inner padding handled by .app-btn wrapper */
+}
+
+/* Icon slot inside buttons */
+.btn-icon{display:inline-flex;align-items:center;justify-content:center}
+.btn-icon svg{width:16px;height:16px;display:inline-block;vertical-align:middle}
+.btn-icon svg path{fill:currentColor}
+.btn-text{display:inline-block}
 
 /* Sidebar tweaks */
 .sidebar-menu{
@@ -71,6 +93,23 @@ body {
 
 /* Small helpers */
 .btn-primary:focus,.btn-link:focus{outline:2px solid rgba(0,99,177,0.2)}
+.ml-8{margin-left:8px}
+
+/* Floating Copilot FAB */
+.copilot-fab{position:fixed;bottom:32px;right:32px;width:64px;height:64px;border-radius:50%;display:flex;align-items:center;justify-content:center;z-index:1000}
+.bot-dialog .close-button, .modal .close-button{background:transparent;border:none;font-size:20px;cursor:pointer;color:var(--fluent-muted)}
+
+/* Admin Pages buttons */
+.create-page-button{margin-left:8px}
+.save-button{background:var(--fluent-primary);color:var(--fluent-bg)}
+.cancel-button{background:transparent;border:1px solid var(--fluent-border);}
+.view-button, .edit-button, .delete-button{margin-right:8px}
+.delete-button{background:transparent;color:#d23f3f;border:1px solid transparent}
+.view-button{background:transparent;border:1px solid var(--fluent-border)}
+
+/* Theme toggle button (top-right) */
+.theme-toggle{position:fixed;top:12px;right:12px;z-index:1200;width:40px;height:40px;border-radius:8px;background:transparent;display:inline-flex;align-items:center;justify-content:center}
+.theme-toggle .btn-icon{width:18px;height:18px}
 
 /* Responsive & collapsible sidebar styles */
 .sidebar-menu{
@@ -119,4 +158,9 @@ body {
   --fluent-border:#333337;
 }
 .theme-dark body, :root.theme-dark body { background: #121212; color: #e6e6e6; }
+
+/* Ensure app buttons adapt to dark theme using variables */
+:root[data-theme='dark'] .app-btn{ background:var(--fluent-surface); color:var(--fluent-muted); }
+:root[data-theme='dark'] .app-btn-primary{ background:var(--fluent-primary); color:var(--fluent-bg); }
+:root[data-theme='dark'] .app-btn-plain{ color:var(--fluent-primary); background:transparent }
 
