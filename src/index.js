@@ -2,6 +2,7 @@ import React from "react";
 import ReactDOM from "react-dom";
 import { HashRouter } from "react-router-dom";
 import App from "./App";
+import { msalInstance } from './services/msalInstance';
 import { loadTheme } from '@fluentui/react';
 
 // lightweight Fluent theme aligned with CSS tokens
@@ -25,9 +26,23 @@ loadTheme({
   }
 });
 
-ReactDOM.render(
-  <HashRouter>
-    <App />
-  </HashRouter>,
-  document.getElementById("root")
-);
+async function bootstrap() {
+  try {
+    if (msalInstance && typeof msalInstance.initialize === 'function') {
+      await msalInstance.initialize();
+    }
+  } catch (e) {
+    // initialization failure should not block the app entirely; log for diagnostics
+    // eslint-disable-next-line no-console
+    console.error('MSAL initialization failed:', e);
+  }
+
+  ReactDOM.render(
+    <HashRouter>
+      <App />
+    </HashRouter>,
+    document.getElementById("root")
+  );
+}
+
+bootstrap();
