@@ -6,6 +6,7 @@ import { Link } from 'react-router-dom';
 import AIAssistant from '../components/AIAssistant';
 import { Stack } from '@fluentui/react';
 import Button from '../components/common/Button';
+import ConfigCard from '../components/common/ConfigCard';
 
 export default function Dashboard() {
   const { instance, accounts } = useMsal();
@@ -102,6 +103,13 @@ export default function Dashboard() {
             <div className="widget-value">-</div>
             <div className="widget-sub">-</div>
           </div>
+          <ConfigCard
+            title="Submit Expense"
+            meta="Expenses form"
+            description="Open the expenses form to submit a new expense report."
+            icon="💸"
+            to="/expenses"
+          />
         </Stack>
         {/* Main Sections */}
         <div style={{display:'flex',gap:24,marginBottom:32}}>

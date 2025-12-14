@@ -17,6 +17,7 @@ import FilesPage from "./pages/FilesPage";
 import ChatPage from "./pages/ChatPage";
 import AdminPage from "./pages/AdminPage";
 import AdminPagesPage from "./pages/AdminPagesPage";
+import ExpensesPage from './pages/ExpensesPage';
 import FloatingCopilotBot from './components/FloatingCopilotBot';
 import ThemeToggle from './components/ThemeToggle';
 
@@ -102,6 +103,7 @@ function App() {
             <Route path="/chat" element={<ChatPage />} />
             <Route path="/admin" element={<AdminPage />} />
             <Route path="/admin/pages" element={<AdminPagesPage />} />
+            <Route path="/expenses" element={<ExpensesPage />} />
           </Routes>
         </main>
         <FloatingCopilotBot />
