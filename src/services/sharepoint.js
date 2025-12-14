@@ -4,7 +4,9 @@ import { GRAPH } from '../utils/apiConfig';
 const GRAPH_BASE = GRAPH.baseUrl;
 
 async function graphToken(scopes = GRAPH.defaultScopes) {
-  return await acquireToken(scopes);
+  const token = await acquireToken(scopes);
+  if (!token) throw new Error('Authentication required');
+  return token;
 }
 
 function graphHeaders(token) {
@@ -83,7 +85,8 @@ export async function deleteListItem(siteId, listId, itemId, { scopes } = {}) {
   return { status: res.status };
 }
 
-export default { getListItems, createListItem, updateListItem, deleteListItem };
+const SharePointService = { getListItems, getListColumns, createListItem, updateListItem, deleteListItem };
+export default SharePointService;
 
 export async function updateItemFields(siteId, listId, itemId, fields, { scopes } = {}) {
   const token = await graphToken(scopes || GRAPH.defaultScopes);
@@ -111,4 +114,4 @@ export async function uploadAttachmentToListItem(siteId, listId, itemId, fileBlo
   return res.json();
 }
 
-export { getListItems, getListColumns, getListColumns as getColumns, getListItems as listItems, createListItem, updateListItem, deleteListItem };
+// Named exports are provided inline above for each function. No aggregated re-export required here.

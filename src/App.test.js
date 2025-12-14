@@ -40,6 +40,10 @@ jest.mock('./pages/CalendarPage', () => {
   const React = require('react');
   return () => React.createElement('div', null, 'CalendarPage');
 });
+jest.mock('./pages/ExpensesPage', () => {
+  const React = require('react');
+  return () => React.createElement('div', null, 'ExpensesPage');
+});
 jest.mock('./pages/FilesPage', () => {
   const React = require('react');
   return () => React.createElement('div', null, 'FilesPage');
@@ -67,8 +71,8 @@ jest.mock('react-router-dom', () => {
   };
 }, { virtual: true });
 
-test('renders App shell with mocked components', () => {
+test('renders App shell with mocked components', async () => {
   render(<App />);
   expect(screen.getByText(/MockProfile/i)).toBeInTheDocument();
-  expect(screen.getByText(/DashboardPage/i)).toBeInTheDocument();
+  await expect(screen.findByText(/DashboardPage/i)).resolves.toBeTruthy();
 });

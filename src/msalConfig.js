@@ -3,7 +3,11 @@ export const msalConfig = {
   auth: {
     clientId: "95b2244d-b468-44bf-9d50-8a0bd92059a5", // Your Azure AD App clientId
     authority: "https://login.microsoftonline.com/7a5bf294-6ae8-47c4-b0c4-b2f9166d7a3f", // Your tenant ID
-    redirectUri: "https://365evergreen.github.io/aivana-be-your-dog/", // Supports local and GitHub Pages
+    // Use environment-configurable redirect or default to current origin so auth
+    // works whether served from GitHub Pages, Azure Static Web Apps, or localhost.
+    redirectUri: (typeof window !== 'undefined' && window.location && window.location.origin)
+      ? `${window.location.origin}/`
+      : (process.env.REACT_APP_REDIRECT_URI || 'http://localhost:3000/'),
   },
   cache: {
     cacheLocation: "localStorage",

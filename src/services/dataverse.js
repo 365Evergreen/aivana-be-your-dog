@@ -1,90 +1,53 @@
 import { acquireToken } from './auth';
 import { DATAVERSE } from '../utils/apiConfig';
 
-const API_VERSION = DATAVERSE.apiVersion || 'v9.2';
+const BASE = (DATAVERSE.orgUrl || '').replace(/\/$/, '');
+const API_BASE = `${BASE}/api/data/${DATAVERSE.apiVersion || 'v9.2'}`;
 
-function baseUrl(orgUrl = DATAVERSE.orgUrl) {
-  return `${orgUrl}/api/data/${API_VERSION}`.replace(/\/+/g, '/');
+function dvHeaders(token) {
+  return {
+    Authorization: `Bearer ${token}`,
+    Accept: 'application/json',
+    'Content-Type': 'application/json',
+  };
 }
 
-async function authToken(scope = DATAVERSE.scope) {
-  if (!scope) throw new Error('Dataverse scope not configured.');
-  return await acquireToken([scope]);
+async function getToken(scope) {
+  const token = await acquireToken(scope ? [scope] : [DATAVERSE.scope]);
+  if (!token) throw new Error('Could not acquire Dataverse token');
+  return token;
 }
 
-export async function getRecords(entitySetName, { orgUrl } = {}) {
-  const token = await authToken();
-  const url = `${baseUrl(orgUrl)}/${entitySetName}`;
-  const res = await fetch(url, {
-    headers: {
-      Authorization: `Bearer ${token}`,
-      Accept: 'application/json',
-    },
-  });
-  if (!res.ok) throw new Error(`Dataverse getRecords failed: ${res.status} ${res.statusText}`);
+export async function queryEntity(entitySet, query = '$top=50', { scopes } = {}) {
+  const token = await getToken(scopes && scopes[0]);
+  const url = `${API_BASE}/${entitySet}?${query}`;
+  const res = await fetch(url, { headers: dvHeaders(token) });
+  if (!res.ok) throw new Error(`Dataverse query failed: ${res.status} ${res.statusText}`);
   return res.json();
 }
 
-export async function getRecord(entitySetName, id, { orgUrl } = {}) {
-  const token = await authToken();
-  const url = `${baseUrl(orgUrl)}/${entitySetName}(${id})`;
-  const res = await fetch(url, {
-    headers: {
-      Authorization: `Bearer ${token}`,
-      Accept: 'application/json',
-    },
-  });
-  if (!res.ok) throw new Error(`Dataverse getRecord failed: ${res.status} ${res.statusText}`);
-  return res.json();
+export async function createRecord(entitySet, record, { scopes } = {}) {
+  const token = await getToken(scopes && scopes[0]);
+  const url = `${API_BASE}/${entitySet}`;
+  const res = await fetch(url, { method: 'POST', headers: dvHeaders(token), body: JSON.stringify(record) });
+  if (!res.ok) throw new Error(`Dataverse createRecord failed: ${res.status} ${res.statusText}`);
+  return res;
 }
 
-export async function createRecord(entitySetName, data, { orgUrl } = {}) {
-  const token = await authToken();
-  const url = `${baseUrl(orgUrl)}/${entitySetName}`;
-  const res = await fetch(url, {
-    method: 'POST',
-    headers: {
-      Authorization: `Bearer ${token}`,
-      Accept: 'application/json',
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(data),
-  });
-  if (!(res.status === 201 || res.status === 204)) throw new Error(`Dataverse createRecord failed: ${res.status} ${res.statusText}`);
-  // Dataverse returns 204/No Content for some creates; return Location header if present
-  return { status: res.status, location: res.headers.get('OData-EntityId') || res.headers.get('location') };
-}
-
-export async function updateRecord(entitySetName, id, data, { orgUrl } = {}) {
-  const token = await authToken();
-  const url = `${baseUrl(orgUrl)}/${entitySetName}(${id})`;
-  const res = await fetch(url, {
-    method: 'PATCH',
-    headers: {
-      Authorization: `Bearer ${token}`,
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(data),
-  });
+export async function updateRecord(entitySet, id, changes, { scopes } = {}) {
+  const token = await getToken(scopes && scopes[0]);
+  const url = `${API_BASE}/${entitySet}(${id})`;
+  const res = await fetch(url, { method: 'PATCH', headers: dvHeaders(token), body: JSON.stringify(changes) });
   if (!res.ok) throw new Error(`Dataverse updateRecord failed: ${res.status} ${res.statusText}`);
+  return res;
+}
+
+export async function deleteRecord(entitySet, id, { scopes } = {}) {
+  const token = await getToken(scopes && scopes[0]);
+  const url = `${API_BASE}/${entitySet}(${id})`;
+  const res = await fetch(url, { method: 'DELETE', headers: dvHeaders(token) });
+  if (!(res.status === 204 || res.status === 200)) throw new Error(`Dataverse deleteRecord failed: ${res.status} ${res.statusText}`);
   return { status: res.status };
 }
 
-export async function deleteRecord(entitySetName, id, { orgUrl } = {}) {
-  const token = await authToken();
-  const url = `${baseUrl(orgUrl)}/${entitySetName}(${id})`;
-  const res = await fetch(url, {
-    method: 'DELETE',
-    headers: { Authorization: `Bearer ${token}` },
-  });
-  if (res.status !== 204) throw new Error(`Dataverse deleteRecord failed: ${res.status} ${res.statusText}`);
-  return { status: res.status };
-}
-
-export default {
-  getRecords,
-  getRecord,
-  createRecord,
-  updateRecord,
-  deleteRecord,
-};
+export default { queryEntity, createRecord, updateRecord, deleteRecord };

@@ -6,7 +6,8 @@ import { Link } from 'react-router-dom';
 import AIAssistant from '../components/AIAssistant';
 import { Stack } from '@fluentui/react';
 import Button from '../components/common/Button';
-import ConfigCard from '../components/common/ConfigCard';
+import Modal from '../components/common/Modal';
+import DynamicSharePointForm from '../components/common/DynamicSharePointForm';
 
 export default function Dashboard() {
   const { instance, accounts } = useMsal();
@@ -16,6 +17,7 @@ export default function Dashboard() {
   const [files, setFiles] = useState([]);
   const [loading, setLoading] = useState(false);
   const [showCopilot, setShowCopilot] = useState(false);
+  const [showExpenseModal, setShowExpenseModal] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -26,7 +28,16 @@ export default function Dashboard() {
           const response = await instance.acquireTokenSilent({
             ...loginRequest,
             account,
+          }).catch(async (error) => {
+            // If silent fails with interaction_required or consent_required, trigger interactive login
+            if (error?.errorCode === 'consent_required' || error?.errorCode === 'interaction_required') {
+              console.log('[Dashboard] Silent token failed, triggering interactive login');
+              await instance.loginRedirect(loginRequest);
+              return null;
+            }
+            throw error;
           });
+          if (!response) return;
           const accessToken = response.accessToken;
 
           const graphClient = Client.init({
@@ -103,13 +114,21 @@ export default function Dashboard() {
             <div className="widget-value">-</div>
             <div className="widget-sub">-</div>
           </div>
-          <ConfigCard
-            title="Submit Expense"
-            meta="Expenses form"
-            description="Open the expenses form to submit a new expense report."
-            icon="💸"
-            to="/expenses"
-          />
+          <div
+            className="config-card"
+            style={{ textDecoration: 'none', cursor: 'pointer' }}
+            onClick={() => setShowExpenseModal(true)}
+            role="button"
+            tabIndex={0}
+            onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { setShowExpenseModal(true); } }}
+          >
+            <div className="widget-card" style={{ cursor: 'pointer' }}>
+              <div className="widget-icon">💸</div>
+              <div className="widget-title">Submit Expense</div>
+              <div className="widget-sub" style={{ fontSize: 13, marginTop: 6 }}>Expenses form</div>
+              <div style={{ marginTop: 10, color: 'var(--fluent-muted)', fontSize: 14 }}>Open the expenses form to submit a new expense report.</div>
+            </div>
+          </div>
         </Stack>
         {/* Main Sections */}
         <div style={{display:'flex',gap:24,marginBottom:32}}>
@@ -191,6 +210,18 @@ export default function Dashboard() {
           </div>
         </div>
       )}
+      {/* Expenses Modal */}
+      <Modal open={showExpenseModal} onClose={() => setShowExpenseModal(false)}>
+        <div style={{width:'min(900px,95vw)',maxHeight:'90vh',overflow:'auto'}}>
+          <div style={{display:'flex',alignItems:'center',justifyContent:'space-between',padding:'18px 24px',borderBottom:'1px solid #f0f0f0',background:'#f8f9fa'}}>
+            <span style={{fontWeight:700,fontSize:20,color:'#2563eb'}}>Submit Expense</span>
+            <Button onClick={() => setShowExpenseModal(false)} className="modal-close" ariaLabel="Close">×</Button>
+          </div>
+          <div style={{padding:24}}>
+            <DynamicSharePointForm onSaved={() => setShowExpenseModal(false)} />
+          </div>
+        </div>
+      </Modal>
     </div>
   );
 }

@@ -37,6 +37,19 @@ async function bootstrap() {
     console.error('MSAL initialization failed:', e);
   }
 
+  // Process any pending redirect response from MSAL so account state and tokens
+  // are available before the app renders. This helps acquireTokenSilent work
+  // correctly after a redirect-based login flow.
+  try {
+    if (msalInstance && typeof msalInstance.handleRedirectPromise === 'function') {
+      await msalInstance.handleRedirectPromise();
+    }
+  } catch (e) {
+    // swallow - failures here will be surfaced during interactive flows
+    // eslint-disable-next-line no-console
+    console.warn('MSAL handleRedirectPromise error:', e);
+  }
+
   // If the app is currently embedded inside an iframe, break out to the top-level window
   // to ensure authentication flows run at top-level (avoid iframe sandbox/COOP issues).
   try {

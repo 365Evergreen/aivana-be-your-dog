@@ -68,3 +68,41 @@ This section has moved here: [https://facebook.github.io/create-react-app/docs/d
 ### `npm run build` fails to minify
 
 This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+
+## Authentication & Microsoft Graph
+
+This app includes a simple MSAL + Microsoft Graph integration scaffold located in `src/services`.
+
+- Configure your Azure AD app and update `src/msalConfig.js` with your `clientId`, `authority`, and `redirectUri`.
+- The singleton MSAL instance is in `src/services/msalInstance.js` and the lightweight helpers are in `src/services/auth.js` (`login`, `logout`, `acquireToken`).
+- Graph helpers that acquire tokens automatically are in `src/services/graph.js` (for example, `getGraphClientForScopes`, `fetchEmails`, `fetchEvents`).
+
+Ensure your Azure AD app has the required delegated scopes consented (for example `Sites.ReadWrite.All` for SharePoint and `Files.Read` for OneDrive access).
+
+## Dataverse & SharePoint stubs
+
+- `src/services/dataverse.js` contains basic CRUD helpers that use the configured Dataverse `orgUrl` and `scope` from `src/utils/apiConfig.js`.
+- `src/services/sharepoint.js` contains SharePoint helpers that call Microsoft Graph for list and drive operations; it uses `GRAPH.defaultScopes` from `src/utils/apiConfig.js`.
+
+Notes:
+- These service helpers are scaffolds — validate scopes and consent in your tenant before using in production.
+- For local development you can use the Azure AD app registration with `http://localhost:3000` as a redirect URI.
+
+## Lazy-loading
+
+Large pages are lazy-loaded with `React.lazy` and `React.Suspense` to reduce the initial bundle size. See `src/App.js` for currently lazy-loaded pages.
+
+## Running the built app locally
+
+To serve the production build locally for a quick smoke test:
+```bash
+npx serve -s build -l 5000
+# then open http://localhost:5000
+```
+
+If you prefer the development server use:
+```bash
+pnpm start
+```
+
+If you modify MSAL configuration or add new scopes, rebuild the app before deploying.
