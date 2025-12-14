@@ -15,17 +15,15 @@ import SignInStatus from '../common/SignInStatus';
 import SettingsModal from '../SettingsModal';
 import Button from '../common/Button';
 
-const BASE_URL = "https://365evergreen.github.io/aivana-be-your-dog";
-
 // icons imported from @fluentui/react-icons
 
 const navLinks = [
-  { to: `${BASE_URL}/#/`, label: "Dashboard", icon: <HomeRegular /> },
-  { to: `${BASE_URL}/#/email`, label: "Email", icon: <MailRegular /> },
-  { to: `${BASE_URL}/#/calendar`, label: "Calendar", icon: <CalendarRegular /> },
-  { to: `${BASE_URL}/#/files`, label: "Files", icon: <FolderRegular /> },
-  { to: `${BASE_URL}/#/ai-assistant`, label: "AI Assistant", icon: <PersonChatRegular /> },
-  { to: `${BASE_URL}/#/admin`, label: "Admin", icon: <ShieldRegular /> },
+  { to: '#/', label: "Dashboard", icon: <HomeRegular /> },
+  { to: '#/email', label: "Email", icon: <MailRegular /> },
+  { to: '#/calendar', label: "Calendar", icon: <CalendarRegular /> },
+  { to: '#/files', label: "Files", icon: <FolderRegular /> },
+  { to: '#/ai-assistant', label: "AI Assistant", icon: <PersonChatRegular /> },
+  { to: '#/admin', label: "Admin", icon: <ShieldRegular /> },
 ];
 
 const SIDEBAR_KEY = 'sidebar.collapsed.v1';
