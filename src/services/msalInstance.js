@@ -4,13 +4,27 @@ let PublicClientApplication;
 try {
 	// msal-browser expects a browser crypto API; guard for test environments
 	const msalPkg = require('@azure/msal-browser');
-	// support different bundler interop shapes
-	PublicClientApplication = msalPkg.PublicClientApplication || msalPkg.default || msalPkg;
-	// if the package itself is a namespace, but the class is the default export
-	if (PublicClientApplication && PublicClientApplication.PublicClientApplication) {
-		PublicClientApplication = PublicClientApplication.PublicClientApplication;
+	console.log('[msalInstance] msalPkg keys:', Object.keys(msalPkg || {}));
+	console.log('[msalInstance] msalPkg.PublicClientApplication type:', typeof msalPkg?.PublicClientApplication);
+	console.log('[msalInstance] msalPkg.default type:', typeof msalPkg?.default);
+	
+	// Try various interop patterns for different bundlers
+	if (typeof msalPkg?.PublicClientApplication === 'function') {
+		PublicClientApplication = msalPkg.PublicClientApplication;
+	} else if (typeof msalPkg?.default?.PublicClientApplication === 'function') {
+		PublicClientApplication = msalPkg.default.PublicClientApplication;
+	} else if (typeof msalPkg?.default === 'function') {
+		PublicClientApplication = msalPkg.default;
+	} else if (typeof msalPkg === 'function') {
+		PublicClientApplication = msalPkg;
+	} else {
+		console.error('[msalInstance] Could not find PublicClientApplication constructor in package');
+		PublicClientApplication = null;
 	}
+	
+	console.log('[msalInstance] Final PublicClientApplication type:', typeof PublicClientApplication);
 } catch (e) {
+	console.error('[msalInstance] Error requiring @azure/msal-browser:', e);
 	PublicClientApplication = null;
 }
 
