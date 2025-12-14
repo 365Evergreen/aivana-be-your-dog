@@ -24,15 +24,19 @@ export const msalInstance = (function createInstance() {
 			const real = new PublicClientApplication(msalConfig);
 			// mark as real instance
 			try { real.__isStub = false; } catch {};
+			console.log('[msalInstance] Real MSAL client initialized successfully');
 			return real;
 		} catch (e) {
 			_initError = e && e.message ? e.message : String(e);
 			// log to console for deployed diagnostics
-			try { console.error('msal init failed:', e); } catch (err) {}
+			console.error('[msalInstance] Real MSAL init failed:', e);
 			// fall through to stub below
 		}
+	} else {
+		console.warn('[msalInstance] PublicClientApplication not available; using stub');
 	}
 	// Minimal stub implementation to satisfy `@azure/msal-react` expectations at runtime
+	console.warn('[msalInstance] Returning stub instance (auth flows will be no-ops)');
 	let _callbackId = 1;
 	const noop = () => { };
 	const makeLogger = (name, ver) => {
@@ -50,7 +54,10 @@ export const msalInstance = (function createInstance() {
 
 	return {
 		getAllAccounts: () => [],
-		loginRedirect: async () => null,
+		loginRedirect: async () => {
+			console.warn('[msalInstance stub] loginRedirect called but this is a stub - no action taken');
+			return null;
+		},
 		// Token helpers resolve to a null-ish response instead of throwing so callers
 		// can fall back to interactive flows or handle absence of tokens gracefully.
 		acquireTokenSilent: async (request) => ({ accessToken: null }),

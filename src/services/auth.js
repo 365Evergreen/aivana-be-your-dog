@@ -5,7 +5,9 @@ import { loginRequest, msalAuthority, msalRedirectUri } from "../msalConfig";
 // These keep implementation minimal: prefer `useMsal` hooks inside components
 // for richer UI flows, but these helpers are useful for service-level calls.
 export async function login() {
+  console.log('[auth.login] Attempting login...');
   const accounts = msalInstance.getAllAccounts();
+  console.log('[auth.login] Existing accounts:', accounts.length);
   if (accounts.length > 0) return accounts[0];
 
   // If the app is embedded inside an iframe, break out to top to ensure auth runs top-level
@@ -20,7 +22,9 @@ export async function login() {
   }
 
   // Use redirect-based interactive sign-in to work reliably on GitHub Pages
+  console.log('[auth.login] Calling msalInstance.loginRedirect with scopes:', loginRequest.scopes);
   await msalInstance.loginRedirect(loginRequest);
+  console.log('[auth.login] loginRedirect called - should now redirect to Azure AD');
   // loginRedirect does not return a result immediately; caller should react to auth state changes
   return msalInstance.getAllAccounts()[0] || null;
 }
