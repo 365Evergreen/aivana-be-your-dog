@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { getListColumns, createListItem, uploadAttachmentToListItem, updateItemFields } from '../../services/sharepoint';
 import { SHAREPOINT } from '../../utils/apiConfig';
 import { searchUsers, uploadFileToDrive } from '../../services/sharepoint';
-import { login } from '../../services/auth';
+import { login, adminConsentUrl } from '../../services/auth';
 
 function RenderPeoplePicker({ column, value, onChange }) {
   const name = column.name;
@@ -137,8 +137,8 @@ export default function DynamicSharePointForm({ siteId = SHAREPOINT.siteId, list
       } catch (err) {
         // If auth is required, present a friendly message that allows sign-in
         const msg = err && err.message ? err.message : String(err);
-        if (msg.toLowerCase().includes('authentication required') || msg.includes('401')) {
-          setError('Authentication required to load this form. Please sign in.');
+        if (msg.toLowerCase().includes('authentication required') || msg.includes('401') || msg.toLowerCase().includes('insufficient') || msg.toLowerCase().includes('consent')) {
+              setError('Authentication or permission consent required to load this form.');
         } else {
           setError(msg);
         }
@@ -262,13 +262,18 @@ export default function DynamicSharePointForm({ siteId = SHAREPOINT.siteId, list
   if (loading) return <div>Loading form...</div>;
   if (error) {
     // Show sign-in button for authentication-related errors
-    if ((error || '').toLowerCase().includes('authentication required') || (error || '').includes('msal')) {
+    if ((error || '').toLowerCase().includes('authentication') || (error || '').includes('msal') || (error || '').toLowerCase().includes('consent')) {
+      const adminUrl = adminConsentUrl();
       return (
         <div style={{ color: 'red' }}>
           <div>Error: {error}</div>
-          <div style={{ marginTop: 8 }}>
+          <div style={{ marginTop: 8, display: 'flex', gap: 8 }}>
             <button onClick={handleSignIn}>Sign in to continue</button>
+            {adminUrl && (
+              <a href={adminUrl} target="_blank" rel="noopener noreferrer"><button>Request admin consent</button></a>
+            )}
           </div>
+          <div style={{ marginTop: 8, fontSize: 12, color: '#777' }}>If you are already signed in, an admin may need to grant the app permission to access SharePoint/Graph on your behalf.</div>
         </div>
       );
     }
