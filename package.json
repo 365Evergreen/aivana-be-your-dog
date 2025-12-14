@@ -52,5 +52,5 @@
   "devDependencies": {
     "react-scripts": "^5.0.1"
   },
-  "homepage": "https://365evergreen.github.io/aivana-be-your-dog/"
+  "homepage": "."
 }
