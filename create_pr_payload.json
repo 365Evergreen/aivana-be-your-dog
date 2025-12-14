@@ -1,0 +1,6 @@
+{
+  "title": "feat: MSAL, Graph, Dataverse scaffolding + Expenses page",
+  "body": "This PR adds MSAL + Microsoft Graph scaffolding, Dataverse and SharePoint service helpers, lazy-loading for heavy pages, a simple `ConfigCard` component for app settings, an `Expenses` page that integrates the dynamic SharePoint form, and unit tests for the new services.\n\nSee PULL_REQUEST_DESCRIPTION.md for details and how to run tests/build.",
+  "head": "feature/msal-graph-dataverse",
+  "base": "main"
+}
