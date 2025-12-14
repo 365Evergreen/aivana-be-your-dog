@@ -47,7 +47,7 @@ export async function fetchPlannerPlansForUser(clientOrScopes) {
   const client = typeof clientOrScopes === 'object' && clientOrScopes.api ? clientOrScopes : await getGraphClientForScopes(clientOrScopes || ["Group.Read.All"]);
   // GET /me/planner/plans isn't available; list plans via joined groups: fetch user's joined groups then plans per group
   const groups = await client.api('/me/memberOf').select('id,displayName').get();
-  const groupIds = (groups && groups.value || []).map(g => g.id).slice(0, 20);
+  const groupIds = ((groups && groups.value) || []).map(g => g.id).slice(0, 20);
   const plans = [];
   for (const gid of groupIds) {
     try {
