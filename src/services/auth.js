@@ -39,13 +39,18 @@ export async function acquireToken(scopes = loginRequest.scopes) {
   } catch (err) {
     // fall back to interactive if silent fails
     // prefer popup when available (useful in test environments), otherwise redirect
-    if (typeof msalInstance.acquireTokenPopup === 'function') {
-      const resp = await msalInstance.acquireTokenPopup(request);
-      return resp && resp.accessToken ? resp.accessToken : null;
-    }
-    if (typeof msalInstance.acquireTokenRedirect === 'function') {
-      // redirect does not return a token immediately
-      await msalInstance.acquireTokenRedirect(request);
+    try {
+      if (typeof msalInstance.acquireTokenPopup === 'function') {
+        const resp = await msalInstance.acquireTokenPopup(request);
+        return resp && resp.accessToken ? resp.accessToken : null;
+      }
+      if (typeof msalInstance.acquireTokenRedirect === 'function') {
+        // redirect does not return a token immediately
+        await msalInstance.acquireTokenRedirect(request);
+        return null;
+      }
+    } catch (e) {
+      // interactive acquisition failed or not available — fall through to null
       return null;
     }
     return null;
@@ -68,4 +73,3 @@ export function adminConsentUrl() {
     return null;
   }
 }
-
