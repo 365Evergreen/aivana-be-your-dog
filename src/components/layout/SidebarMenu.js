@@ -25,6 +25,7 @@ const navLinks = [
   { to: '#/ai-assistant', label: "AI Assistant", icon: <PersonChatRegular /> },
   { to: '#/admin', label: "Admin", icon: <ShieldRegular /> },
   { to: '#/planner', label: "Planner", icon: <AppsRegular /> },
+  { to: '#/auth-diag', label: "Auth Diag", icon: <AppsRegular /> },
 ];
 
 const SIDEBAR_KEY = 'sidebar.collapsed.v1';
