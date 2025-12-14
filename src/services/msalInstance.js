@@ -1,31 +1,15 @@
 import { msalConfig } from "../msalConfig";
+import * as msalBrowser from '@azure/msal-browser';
 
-let PublicClientApplication;
-try {
-	// msal-browser expects a browser crypto API; guard for test environments
-	const msalPkg = require('@azure/msal-browser');
-	console.log('[msalInstance] msalPkg keys:', Object.keys(msalPkg || {}));
-	console.log('[msalInstance] msalPkg.PublicClientApplication type:', typeof msalPkg?.PublicClientApplication);
-	console.log('[msalInstance] msalPkg.default type:', typeof msalPkg?.default);
-	
-	// Try various interop patterns for different bundlers
-	if (typeof msalPkg?.PublicClientApplication === 'function') {
-		PublicClientApplication = msalPkg.PublicClientApplication;
-	} else if (typeof msalPkg?.default?.PublicClientApplication === 'function') {
-		PublicClientApplication = msalPkg.default.PublicClientApplication;
-	} else if (typeof msalPkg?.default === 'function') {
-		PublicClientApplication = msalPkg.default;
-	} else if (typeof msalPkg === 'function') {
-		PublicClientApplication = msalPkg;
-	} else {
-		console.error('[msalInstance] Could not find PublicClientApplication constructor in package');
-		PublicClientApplication = null;
-	}
-	
-	console.log('[msalInstance] Final PublicClientApplication type:', typeof PublicClientApplication);
-} catch (e) {
-	console.error('[msalInstance] Error requiring @azure/msal-browser:', e);
-	PublicClientApplication = null;
+// Extract PublicClientApplication using direct ES6 import
+const PublicClientApplication = msalBrowser.PublicClientApplication;
+
+console.log('[msalInstance] msalBrowser type:', typeof msalBrowser);
+console.log('[msalInstance] PublicClientApplication type:', typeof PublicClientApplication);
+console.log('[msalInstance] msalBrowser keys (first 10):', Object.keys(msalBrowser).slice(0, 10));
+
+if (typeof PublicClientApplication !== 'function') {
+	console.error('[msalInstance] PublicClientApplication is not a constructor!');
 }
 
 // Singleton MSAL instance used across the app and services. In non-browser/test
@@ -33,7 +17,7 @@ try {
 // export a lightweight stub to avoid runtime crashes during tests.
 export const msalInstance = (function createInstance() {
 	let _initError = null;
-	if (PublicClientApplication) {
+	if (typeof PublicClientApplication === 'function') {
 		try {
 			const real = new PublicClientApplication(msalConfig);
 			// mark as real instance
