@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import Button from '../components/common/Button';
 import '../assets/styles/AdminPages.css';
 
 // Sample initial pages data
@@ -84,12 +85,7 @@ export default function AdminPagesPage() {
       <div className="admin-pages-header">
         <h1>Page Manager</h1>
         <p>Create and manage site pages</p>
-        <button 
-          className="create-page-button"
-          onClick={handleCreatePage}
-        >
-          <span>+</span> Create Page
-        </button>
+        <Button variant="primary" className="create-page-button" onClick={handleCreatePage} icon={<span>+</span>}>Create Page</Button>
       </div>
 
       {showForm ? (
@@ -144,19 +140,9 @@ function PageCard({ page, onEdit, onDelete }) {
       </div>
       
       <div className="page-actions">
-        <button className="view-button">View</button>
-        <button 
-          className="edit-button"
-          onClick={() => onEdit(page)}
-        >
-          Edit
-        </button>
-        <button 
-          className="delete-button"
-          onClick={() => onDelete(page.id)}
-        >
-          Delete
-        </button>
+        <Button className="view-button">View</Button>
+        <Button className="edit-button" onClick={() => onEdit(page)}>Edit</Button>
+        <Button className="delete-button" onClick={() => onDelete(page.id)}>Delete</Button>
       </div>
     </div>
   );
@@ -254,12 +240,8 @@ function PageForm({ page, isEditing, onSave, onCancel }) {
         </div>
         
         <div className="form-actions">
-          <button type="button" className="cancel-button" onClick={onCancel}>
-            Cancel
-          </button>
-          <button type="submit" className="save-button">
-            {isEditing ? 'Update Page' : 'Create Page'}
-          </button>
+          <Button type="button" className="cancel-button" onClick={onCancel}>Cancel</Button>
+          <Button type="submit" className="save-button" variant="primary">{isEditing ? 'Update Page' : 'Create Page'}</Button>
         </div>
       </form>
     </div>

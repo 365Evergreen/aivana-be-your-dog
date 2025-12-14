@@ -1,5 +1,5 @@
 body {
-  background: #f4f6fa;
+  background: var(--fluent-bg);
 }
 .dashboard-root {
   display: flex;
@@ -8,8 +8,8 @@ body {
 }
 .sidebar-menu {
   width: 250px;
-  background: #fff;
-  border-right: 1px solid #e5e7eb;
+  background: var(--fluent-surface);
+  border-right: 1px solid var(--fluent-border);
   padding: 24px 0 0 0;
   display: flex;
   flex-direction: column;
@@ -25,7 +25,7 @@ body {
   width: 48px;
   height: 48px;
   border-radius: 50%;
-  background: #e0e7ef;
+  background: var(--fluent-surface);
   margin-right: 16px;
 }
 .user-name {
@@ -34,7 +34,7 @@ body {
 }
 .user-email {
   font-size: 0.95rem;
-  color: #888;
+  color: var(--fluent-muted);
 }
 .sidebar-menu ul {
   list-style: none;
@@ -49,19 +49,19 @@ body {
   align-items: center;
   padding: 10px 16px;
   border-radius: 8px;
-  color: #222;
+  color: var(--fluent-text);
   text-decoration: none;
   font-weight: 500;
   transition: background 0.2s;
 }
 .sidebar-menu a.active, .sidebar-menu a:hover {
-  background: #2563eb;
-  color: #fff;
+  background: var(--fluent-info);
+  color: var(--fluent-bg);
 }
 .main-content {
   flex: 1;
   padding: 32px 40px 32px 40px;
-  background: #f4f6fa;
+  background: var(--fluent-bg);
 }
 .dashboard-header {
   display: flex;
@@ -74,12 +74,12 @@ body {
   margin: 0 0 8px 0;
 }
 .dashboard-header p {
-  color: #555;
+  color: var(--fluent-muted);
   margin: 0;
 }
 .dashboard-header .last-updated {
   font-size: 0.95rem;
-  color: #888;
+  color: var(--fluent-muted);
 }
 .dashboard-widgets {
   display: flex;
@@ -88,7 +88,7 @@ body {
 }
 .widget-card {
   flex: 1;
-  background: #fff;
+  background: var(--fluent-surface);
   border-radius: 16px;
   box-shadow: 0 2px 8px rgba(0,0,0,0.03);
   padding: 24px 24px 16px 24px;
@@ -105,6 +105,8 @@ body {
   justify-content: center;
   font-size: 1.6rem;
   margin-bottom: 12px;
+  background: var(--fluent-surface);
+  color: var(--fluent-info);
 }
 .widget-card .widget-title {
   font-size: 1.1rem;
@@ -117,7 +119,7 @@ body {
   margin-bottom: 4px;
 }
 .widget-card .widget-sub {
-  color: #888;
+  color: var(--fluent-muted);
   font-size: 0.95rem;
 }
 .dashboard-sections {
@@ -126,7 +128,7 @@ body {
   margin-bottom: 32px;
 }
 .section-card {
-  background: #fff;
+  background: var(--fluent-surface);
   border-radius: 16px;
   box-shadow: 0 2px 8px rgba(0,0,0,0.03);
   padding: 24px;
@@ -147,8 +149,8 @@ body {
   margin: 0;
 }
 .section-header button {
-  background: #2563eb;
-  color: #fff;
+  background: var(--fluent-info);
+  color: var(--fluent-bg);
   border: none;
   border-radius: 6px;
   padding: 6px 16px;
@@ -157,7 +159,7 @@ body {
   transition: background 0.2s;
 }
 .section-header button:hover {
-  background: #1741a6;
+  opacity: 0.95;
 }
 .schedule-list {
   margin: 0;
@@ -182,12 +184,12 @@ body {
   font-weight: 500;
 }
 .schedule-meta {
-  color: #888;
+  color: var(--fluent-muted);
   font-size: 0.95rem;
 }
 .schedule-status {
-  background: #e0e7ef;
-  color: #2563eb;
+  background: var(--fluent-surface);
+  color: var(--fluent-info);
   border-radius: 6px;
   padding: 2px 10px;
   font-size: 0.9rem;
@@ -216,7 +218,7 @@ body {
   font-weight: 500;
 }
 .email-subject {
-  color: #888;
+  color: var(--fluent-muted);
   font-size: 0.95rem;
 }
 .email-meta {
@@ -225,12 +227,12 @@ body {
   gap: 8px;
 }
 .email-time {
-  color: #888;
+  color: var(--fluent-muted);
   font-size: 0.95rem;
 }
 .email-priority {
-  background: #ff4d4f;
-  color: #fff;
+  background: var(--fluent-danger);
+  color: var(--fluent-bg);
   border-radius: 6px;
   padding: 2px 10px;
   font-size: 0.9rem;
@@ -241,7 +243,7 @@ body {
   gap: 16px;
 }
 .file-card {
-  background: #f8fafc;
+  background: var(--fluent-surface);
   border-radius: 10px;
   padding: 16px 20px;
   display: flex;
@@ -254,12 +256,12 @@ body {
   margin-bottom: 4px;
 }
 .file-meta {
-  color: #888;
+  color: var(--fluent-muted);
   font-size: 0.95rem;
   margin-bottom: 2px;
 }
 .file-shared {
-  color: #2563eb;
+  color: var(--fluent-info);
   font-size: 0.95rem;
 }
 .files-section-footer {
@@ -268,9 +270,9 @@ body {
   margin-top: 8px;
 }
 .files-section-footer button {
-  background: #fff;
-  color: #2563eb;
-  border: 1px solid #2563eb;
+  background: transparent;
+  color: var(--fluent-info);
+  border: 1px solid var(--fluent-info);
   border-radius: 6px;
   padding: 6px 16px;
   font-size: 0.95rem;
@@ -278,8 +280,8 @@ body {
   transition: background 0.2s, color 0.2s;
 }
 .files-section-footer button:hover {
-  background: #2563eb;
-  color: #fff;
+  background: var(--fluent-info);
+  color: var(--fluent-bg);
 }
 .chat-page {
   padding: 20px;
@@ -292,19 +294,19 @@ body {
 }
 .chat-header h2 {
   margin: 0 0 8px 0;
-  color: #2563eb;
+  color: var(--fluent-info);
 }
 .chat-header p {
   margin: 0;
-  color: #6b7280;
+  color: var(--fluent-muted);
 }
 .chat-container {
   flex: 1;
   min-height: 500px;
-  border: 1px solid #e5e7eb;
+  border: 1px solid var(--fluent-border);
   border-radius: 8px;
   overflow: hidden;
-  background: #fff;
+  background: var(--fluent-surface);
 }
 .fallback-message {
   text-align: center;
@@ -312,15 +314,15 @@ body {
 }
 .fallback-message h3 {
   margin-bottom: 16px;
-  color: #4b5563;
+  color: var(--fluent-muted);
 }
 .fallback-message p {
   margin-bottom: 24px;
-  color: #6b7280;
+  color: var(--fluent-muted);
 }
 .fallback-button {
-  background-color: #2563eb;
-  color: white;
+  background-color: var(--fluent-info);
+  color: var(--fluent-bg);
   border: none;
   padding: 10px 20px;
   border-radius: 4px;
@@ -329,7 +331,7 @@ body {
   transition: background 0.2s;
 }
 .fallback-button:hover {
-  background-color: #1741a6;
+  opacity: 0.95;
 }
 .chat-error {
   display: flex;
@@ -341,23 +343,23 @@ body {
   text-align: center;
 }
 .chat-error h3 {
-  color: #d32f2f;
+  color: var(--fluent-danger);
   margin-bottom: 12px;
 }
 .chat-error button {
   margin-top: 16px;
   padding: 8px 16px;
-  background-color: #0078d4;
-  color: white;
+  background-color: var(--fluent-info);
+  color: var(--fluent-bg);
   border: none;
   border-radius: 4px;
   cursor: pointer;
 }
 .chat-error button:hover {
-  background-color: #106ebe;
+  opacity: 0.95;
 }
 .small-text {
   font-size: 12px;
-  color: #666;
+  color: var(--fluent-muted);
   margin-top: 20px;
 }

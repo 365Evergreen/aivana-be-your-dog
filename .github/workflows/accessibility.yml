@@ -1,0 +1,49 @@
+name: Accessibility Audit
+
+on:
+  push:
+    branches: [ 'cleanup/clean-pr' ]
+  pull_request:
+    branches: [ main, master ]
+  workflow_dispatch: {}
+
+jobs:
+  pa11y-audit:
+    name: Run pa11y accessibility audit
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install dependencies (npm)
+        run: npm install --no-audit --no-fund
+
+      - name: Build production bundle
+        run: npm run build --if-present
+
+      - name: Serve build in background
+        run: npx serve -s build -l 5000 &
+
+      - name: Wait for server
+        run: npx wait-on http://localhost:5000/aivana-be-your-dog/ --timeout 30000
+        env:
+          NODE_TLS_REJECT_UNAUTHORIZED: '0'
+
+      - name: Run pa11y audit
+        run: |
+          npx pa11y http://localhost:5000/aivana-be-your-dog/ --reporter json > pa11y-report.json || true
+
+      - name: Upload pa11y report
+        uses: actions/upload-artifact@v4
+        with:
+          name: pa11y-report
+          path: pa11y-report.json
+
+      - name: Output brief summary
+        run: |
+          echo 'Pa11y report saved to pa11y-report.json (artifact)'

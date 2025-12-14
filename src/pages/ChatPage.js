@@ -1,4 +1,6 @@
 import React, { useEffect, useRef } from 'react';
+import ReactDOM from 'react-dom';
+import Button from '../components/common/Button';
 import "../assets/styles/ChatPage.css";
 
 export default function ChatPage() {
@@ -49,24 +51,26 @@ export default function ChatPage() {
       }
     };
     
-    // Show error message when bot fails to load
+    // Show error message when bot fails to load — render a small React fragment so we can use Fluent buttons
     const showErrorMessage = () => {
       if (!container) return;
-      
-      container.innerHTML = `
-        <div class="chat-error">
+
+      // clear existing content
+      container.innerHTML = '';
+
+      const mount = document.createElement('div');
+      container.appendChild(mount);
+
+      const ErrorNode = (
+        <div className="chat-error">
           <h3>Connection Error</h3>
           <p>Unable to connect to the AI Assistant. Please try again later.</p>
-          <button id="retry-button">Try Again</button>
-          <p class="small-text">If the problem persists, you may need to <a href="https://web.powerva.microsoft.com/environments/Default-${tenantId}/bots/${botId}/webchat" target="_blank">open the assistant in a new window</a>.</p>
+          <Button onClick={loadBot} className="ml-8">Try Again</Button>
+          <p className="small-text">If the problem persists, you may need to <a href={`https://web.powerva.microsoft.com/environments/Default-${tenantId}/bots/${botId}/webchat`} target="_blank" rel="noreferrer">open the assistant in a new window</a>.</p>
         </div>
-      `;
-      
-      // Add event listener to retry button
-      const retryButton = container.querySelector('#retry-button');
-      if (retryButton) {
-        retryButton.addEventListener('click', loadBot);
-      }
+      );
+
+      ReactDOM.render(ErrorNode, mount);
     };
     
     // Load the bot initially
