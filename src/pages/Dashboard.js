@@ -6,7 +6,6 @@ import { Link } from 'react-router-dom';
 import AIAssistant from '../components/AIAssistant';
 import { Stack } from '@fluentui/react';
 import Button from '../components/common/Button';
-import ConfigCard from '../components/common/ConfigCard';
 import Modal from '../components/common/Modal';
 import DynamicSharePointForm from '../components/common/DynamicSharePointForm';
 
