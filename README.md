@@ -1,4 +1,3 @@
-````markdown
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
@@ -107,4 +106,3 @@ pnpm start
 ```
 
 If you modify MSAL configuration or add new scopes, rebuild the app before deploying.
-

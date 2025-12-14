@@ -47,3 +47,5 @@ Purpose: Help an AI coding agent quickly become productive in this Create React 
   - Update `src/msalConfig.js` only via environment-aware edits (local vs production); prefer keeping secrets out of source.
 
 If anything above is unclear or you want me to add examples (e.g., a MSAL provider scaffold, Graph helper, or a local bot-hosting note), tell me which piece to expand.
+
+Add MSAL and Graph integration scaffold. Add intgration with Dataverse and SharePoint Online as data sources.

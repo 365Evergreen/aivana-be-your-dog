@@ -24,3 +24,6 @@ yarn-error.log*
 
 # local secrets
 .github/tap.md
+
+# tenant specific settings
+endpoints.md

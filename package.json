@@ -5,8 +5,8 @@
   "dependencies": {
     "@azure/msal-browser": "^4.21.0",
     "@azure/msal-react": "^3.0.19",
-    "@fluentui/react-icons": "^2.0.308",
     "@fluentui/react": "^8.125.3",
+    "@fluentui/react-icons": "^2.0.308",
     "@microsoft/microsoft-graph-client": "^3.0.7",
     "@microsoft/sp-http": "^1.11.0",
     "@testing-library/dom": "^10.4.1",
@@ -50,7 +50,9 @@
     ]
   },
   "devDependencies": {
-    "react-scripts": "^5.0.1"
+    "react-scripts": "^5.0.1",
+    "source-map-explorer": "^2.5.3",
+    "webpack-bundle-analyzer": "^5.1.0"
   },
   "homepage": "."
 }
