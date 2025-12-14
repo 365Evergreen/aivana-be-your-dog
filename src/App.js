@@ -4,25 +4,25 @@ import { MsalProvider } from "@azure/msal-react";
 import {
   Routes,
   Route,
-  
 } from "react-router-dom";
 
 import { msalInstance } from "./services/msalInstance";
 import M365Profile from "./components/M365Profile";
 import SidebarMenu from "./components/layout/SidebarMenu";
 import Dashboard from "./pages/Dashboard";
-import EmailPage from "./pages/EmailPage";
-import CalendarPage from "./pages/CalendarPage";
-import FilesPage from "./pages/FilesPage";
-import ChatPage from "./pages/ChatPage";
-import AdminPage from "./pages/AdminPage";
-import AdminPagesPage from "./pages/AdminPagesPage";
-import ExpensesPage from './pages/ExpensesPage';
 import FloatingCopilotBot from './components/FloatingCopilotBot';
 import ThemeToggle from './components/ThemeToggle';
 
 import "./assets/styles/global.css";
 import "./assets/styles/dashboard.css";
+
+const EmailPage = React.lazy(() => import('./pages/EmailPage'));
+const CalendarPage = React.lazy(() => import('./pages/CalendarPage'));
+const FilesPage = React.lazy(() => import('./pages/FilesPage'));
+const ChatPage = React.lazy(() => import('./pages/ChatPage'));
+const AdminPage = React.lazy(() => import('./pages/AdminPage'));
+const AdminPagesPage = React.lazy(() => import('./pages/AdminPagesPage'));
+const ExpensesPage = React.lazy(() => import('./pages/ExpensesPage'));
 
 function App() {
   const [compactMode, setCompactMode] = React.useState(false);
@@ -95,6 +95,7 @@ function App() {
         <SidebarMenu />
         <main className="main-content">
           <M365Profile />
+          <React.Suspense fallback={<div>Loading...</div>}>
           <Routes>
             <Route path="/" element={<Dashboard />} />
             <Route path="/email" element={<EmailPage />} />
@@ -105,6 +106,7 @@ function App() {
             <Route path="/admin/pages" element={<AdminPagesPage />} />
             <Route path="/expenses" element={<ExpensesPage />} />
           </Routes>
+          </React.Suspense>
         </main>
         <FloatingCopilotBot />
       </div>
