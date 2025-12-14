@@ -23,6 +23,7 @@ const ChatPage = React.lazy(() => import('./pages/ChatPage'));
 const AdminPage = React.lazy(() => import('./pages/AdminPage'));
 const AdminPagesPage = React.lazy(() => import('./pages/AdminPagesPage'));
 const ExpensesPage = React.lazy(() => import('./pages/ExpensesPage'));
+const PlannerPage = React.lazy(() => import('./pages/PlannerPage'));
 
 function App() {
   const [compactMode, setCompactMode] = React.useState(false);
@@ -105,6 +106,7 @@ function App() {
             <Route path="/admin" element={<AdminPage />} />
             <Route path="/admin/pages" element={<AdminPagesPage />} />
             <Route path="/expenses" element={<ExpensesPage />} />
+            <Route path="/planner" element={<PlannerPage />} />
           </Routes>
           </React.Suspense>
         </main>

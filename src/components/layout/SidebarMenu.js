@@ -24,6 +24,7 @@ const navLinks = [
   { to: '#/files', label: "Files", icon: <FolderRegular /> },
   { to: '#/ai-assistant', label: "AI Assistant", icon: <PersonChatRegular /> },
   { to: '#/admin', label: "Admin", icon: <ShieldRegular /> },
+  { to: '#/planner', label: "Planner", icon: <AppsRegular /> },
 ];
 
 const SIDEBAR_KEY = 'sidebar.collapsed.v1';

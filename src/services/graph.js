@@ -41,3 +41,52 @@ export async function fetchFiles(clientOrScopes, top = 5) {
   const res = await client.api('/me/drive/recent').top(top).get();
   return res.value;
 }
+
+// Planner helpers
+export async function fetchPlannerPlansForUser(clientOrScopes) {
+  const client = typeof clientOrScopes === 'object' && clientOrScopes.api ? clientOrScopes : await getGraphClientForScopes(clientOrScopes || ["Group.Read.All"]);
+  // GET /me/planner/plans isn't available; list plans via joined groups: fetch user's joined groups then plans per group
+  const groups = await client.api('/me/memberOf').select('id,displayName').get();
+  const groupIds = (groups && groups.value || []).map(g => g.id).slice(0, 20);
+  const plans = [];
+  for (const gid of groupIds) {
+    try {
+      const res = await client.api(`/groups/${gid}/planner/plans`).get();
+      if (res && Array.isArray(res.value)) plans.push(...res.value);
+    } catch (e) {
+      // ignore groups without planner or permissions
+    }
+  }
+  return plans;
+}
+
+export async function fetchPlannerTasksForUser(clientOrScopes) {
+  const client = typeof clientOrScopes === 'object' && clientOrScopes.api ? clientOrScopes : await getGraphClientForScopes(clientOrScopes || ["Group.Read.All"]);
+  const res = await client.api('/me/planner/tasks').get();
+  return (res && res.value) || [];
+}
+
+export async function fetchPlanTasks(planId, clientOrScopes) {
+  if (!planId) throw new Error('planId is required');
+  const client = typeof clientOrScopes === 'object' && clientOrScopes.api ? clientOrScopes : await getGraphClientForScopes(clientOrScopes || ["Group.Read.All"]);
+  const res = await client.api(`/planner/plans/${planId}/tasks`).get();
+  return (res && res.value) || [];
+}
+
+export async function createPlannerTask({ title, planId, bucketId, assignments = {} }, clientOrScopes) {
+  if (!title || !planId || !bucketId) throw new Error('title, planId and bucketId are required to create a planner task');
+  const client = typeof clientOrScopes === 'object' && clientOrScopes.api ? clientOrScopes : await getGraphClientForScopes(clientOrScopes || ["Group.ReadWrite.All"]);
+  const body = { title, planId, bucketId, assignments };
+  const res = await client.api('/planner/tasks').post(body);
+  return res;
+}
+
+export async function updatePlannerTask(taskId, patch, clientOrScopes) {
+  if (!taskId) throw new Error('taskId is required');
+  const client = typeof clientOrScopes === 'object' && clientOrScopes.api ? clientOrScopes : await getGraphClientForScopes(clientOrScopes || ["Group.ReadWrite.All"]);
+  // Graph PATCH requires If-Match header with ETag; a simplified approach is to fetch the task, get etag
+  const existing = await client.api(`/planner/tasks/${taskId}`).get();
+  const etag = existing['@odata.etag'] || '*';
+  const res = await client.api(`/planner/tasks/${taskId}`).header('If-Match', etag).patch(patch);
+  return res;
+}
