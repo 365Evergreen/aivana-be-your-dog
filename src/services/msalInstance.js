@@ -18,10 +18,17 @@ try {
 // environments where `@azure/msal-browser` cannot initialize (missing crypto),
 // export a lightweight stub to avoid runtime crashes during tests.
 export const msalInstance = (function createInstance() {
+	let _initError = null;
 	if (PublicClientApplication) {
 		try {
-			return new PublicClientApplication(msalConfig);
+			const real = new PublicClientApplication(msalConfig);
+			// mark as real instance
+			try { real.__isStub = false; } catch {};
+			return real;
 		} catch (e) {
+			_initError = e && e.message ? e.message : String(e);
+			// log to console for deployed diagnostics
+			try { console.error('msal init failed:', e); } catch (err) {}
 			// fall through to stub below
 		}
 	}
@@ -64,5 +71,8 @@ export const msalInstance = (function createInstance() {
 		removeEventCallback: (id) => { /* no-op */ },
 		initialize: async () => { return; },
 		handleRedirectPromise: async () => { return; },
+		// expose diagnostic properties so UI can surface why MSAL fell back to stub
+		__isStub: true,
+		__initError: _initError,
 	};
 })();
