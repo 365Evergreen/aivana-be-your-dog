@@ -14,9 +14,12 @@ export default function M365Profile() {
   const [profile, setProfile] = React.useState(null);
 
   React.useEffect(() => {
-    // attempt silent SSO when app mounts
+    // attempt silent SSO when app mounts; if consent is required, let user sign in via sidebar button
     if (!isAuthenticated) {
-      instance.ssoSilent?.(loginRequest).catch(() => {});
+      instance.ssoSilent?.(loginRequest).catch((error) => {
+        // Silently handle consent_required or interaction_required - user will sign in via UI button
+        console.log('[M365Profile] ssoSilent failed (expected on first visit):', error?.errorCode || error?.message);
+      });
     }
   }, [isAuthenticated, instance]);
 

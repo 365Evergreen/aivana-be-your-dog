@@ -28,7 +28,16 @@ export default function Dashboard() {
           const response = await instance.acquireTokenSilent({
             ...loginRequest,
             account,
+          }).catch(async (error) => {
+            // If silent fails with interaction_required or consent_required, trigger interactive login
+            if (error?.errorCode === 'consent_required' || error?.errorCode === 'interaction_required') {
+              console.log('[Dashboard] Silent token failed, triggering interactive login');
+              await instance.loginRedirect(loginRequest);
+              return null;
+            }
+            throw error;
           });
+          if (!response) return;
           const accessToken = response.accessToken;
 
           const graphClient = Client.init({
